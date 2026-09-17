@@ -1,15 +1,11 @@
-from OpenGL.GL import *
+from OpenGL.GL import glClear, GL_COLOR_BUFFER_BIT
 
 
 class Renderer:
-
-    def __init__(self, shader):
-        self.shader = shader
-
-        glClearColor(0.03, 0.03, 0.03, 1.0)
-
-
-    def render(self, mesh) -> None:
+    def clear(self) -> None:
         glClear(GL_COLOR_BUFFER_BIT)
-        self.shader.use()
+
+
+    def draw(self, shader, mesh) -> None:
+        shader.use()
         mesh.draw()
