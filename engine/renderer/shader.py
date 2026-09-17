@@ -5,22 +5,41 @@ from OpenGL.GL.shaders import compileShader, compileProgram
 class Shader:
 
     def __init__(self, vertex_path: str, fragment_path: str) -> None:
-        with open(vertex_path) as file:
+        with open(vertex_path, "r") as file:
             vertex_source = file.read()
 
-        with open(fragment_path) as file:
+        with open(fragment_path, "r") as file:
             fragment_source = file.read()
 
+        vertex_shader = glCreateShader(GL_VERTEX_SHADER)
+        glShaderSource(vertex_shader, vertex_source)
+        glCompileShader(vertex_shader)
 
-        vertex_shader = compileShader(vertex_source, GL_VERTEX_SHADER)
-        fragment_shader = compileShader(fragment_source, GL_FRAGMENT_SHADER)
+        if not glGetShaderiv(vertex_shader, GL_COMPILE_STATUS):
+            error = glGetShaderInfoLog(vertex_shader)
+            raise RuntimeError(error.decode())
 
-        self.program = compileProgram(vertex_shader, fragment_shader)
+        fragment_shader = glCreateShader(GL_FRAGMENT_SHADER)
+        glShaderSource(fragment_shader, fragment_source)
+        glCompileShader(fragment_shader)
+
+        if not glGetShaderiv(fragment_shader, GL_COMPILE_STATUS):
+            error = glGetShaderInfoLog(fragment_shader)
+            raise RuntimeError(error.decode())
+
+        self.program = glCreateProgram()
+
+        glAttachShader(self.program, vertex_shader)
+        glAttachShader(self.program, fragment_shader)
+        glLinkProgram(self.program)
+
+        if not glGetProgramiv(self.program, GL_LINK_STATUS):
+            error = glGetProgramInfoLog(self.program)
+            raise RuntimeError(error.decode())
+
+        glDeleteShader(vertex_shader)
+        glDeleteShader(fragment_shader)
 
 
     def use(self) -> None:
         glUseProgram(self.program)
-
-
-    def destroy(self) -> None:
-        glDeleteProgram(self.program)
