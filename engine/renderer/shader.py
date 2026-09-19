@@ -43,3 +43,9 @@ class Shader:
 
     def use(self) -> None:
         glUseProgram(self.program)
+        
+
+    def destroy(self) -> None:
+        if self.program:
+            glDeleteProgram(self.program)
+            self.program = 0
