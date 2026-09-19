@@ -30,6 +30,7 @@ def main() -> None:
     finally:
         triangle.destroy()
         window.destroy()
+        shader.destroy()
 
 
 if __name__ == "__main__":
