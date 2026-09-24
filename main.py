@@ -1,3 +1,5 @@
+import time
+
 from engine.renderer.window import Window
 from engine.renderer.shader import Shader
 from engine.renderer.mesh import Mesh
@@ -15,12 +17,23 @@ def main() -> None:
     window = Window("The Prince")
     renderer = Renderer()
 
-    shader = Shader("engine/shaders/basic.vert", "engine/shaders/basic.frag")
+    shader = Shader(
+        "engine/shaders/basic.vert",
+        "engine/shaders/basic.frag",
+    )
 
     triangle = Mesh(vertices)
 
+    start_time = time.perf_counter()
+
     try:
+        shader.use()
+        shader.set_vec3("color", (0.8, 0.2, 1.0))
+
         while not window.should_close():
+            current_time = time.perf_counter() - start_time
+
+            shader.set_float("time", current_time)
 
             renderer.clear()
             renderer.draw(shader, triangle)
@@ -29,8 +42,8 @@ def main() -> None:
 
     finally:
         triangle.destroy()
+        shader.delete()
         window.destroy()
-        shader.destroy()
 
 
 if __name__ == "__main__":
