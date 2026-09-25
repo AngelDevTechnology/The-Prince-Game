@@ -1,3 +1,4 @@
+-- database: The_prince.db
 CREATE TABLE IF NOT EXISTS PNJ (
     idPNJ INTEGER PRIMARY KEY AUTOINCREMENT,
     nom TEXT NOT NULL,
