@@ -1,17 +1,10 @@
 #version 330 core
 
-layout (location = 0) in vec3 a_position;
+layout (location = 0) in vec3 position;
 
-uniform float time;
+uniform mat4 mvp;
 
 void main()
 {
-    float offset = sin(time) * 0.5;
-
-    gl_Position = vec4(
-        a_position.x + offset,
-        a_position.y + offset,
-        a_position.z,
-        1.0
-    );
+    gl_Position = mvp * vec4(position, 1.0);
 }

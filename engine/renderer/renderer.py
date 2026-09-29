@@ -14,18 +14,24 @@ class Renderer:
 
     @staticmethod
     def _configure_state() -> None:
+        # Depth testing
         glEnable(GL_DEPTH_TEST)
         glDepthFunc(GL_LESS)
 
+        # Back-face culling
         glEnable(GL_CULL_FACE)
         glCullFace(GL_BACK)
         glFrontFace(GL_CCW)
 
+        # Clear color
         glClearColor(0.05, 0.05, 0.07, 1.0)
 
     @staticmethod
     def clear() -> None:
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+        glClear(
+            GL_COLOR_BUFFER_BIT
+            | GL_DEPTH_BUFFER_BIT
+        )
 
     @staticmethod
     def draw(shader: Shader, mesh: Mesh) -> None:

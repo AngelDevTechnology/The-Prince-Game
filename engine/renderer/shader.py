@@ -8,6 +8,8 @@ from OpenGL.GL.shaders import compileProgram, compileShader
 import numpy as np
 from numpy.typing import NDArray
 
+from engine.math3d.mat4D import Mat4
+
 FloatMatrix = NDArray[np.float32]
 
 
@@ -154,6 +156,22 @@ class Shader:
         glUniformMatrix3fv(location, 1, GL_FALSE, value)
 
 
-    def set_mat4(self, name: str, value: FloatMatrix) -> None:
+    def set_mat4(self, name: str, matrix: Mat4) -> None:
         location = self._get_uniform_location(name)
-        glUniformMatrix4fv(location, 1, GL_FALSE, value)
+
+        value = np.array(
+            [
+                matrix.m00, matrix.m01, matrix.m02, matrix.m03,
+                matrix.m10, matrix.m11, matrix.m12, matrix.m13,
+                matrix.m20, matrix.m21, matrix.m22, matrix.m23,
+                matrix.m30, matrix.m31, matrix.m32, matrix.m33,
+            ],
+            dtype=np.float32,
+        )
+
+        glUniformMatrix4fv(
+            location,
+            1,
+            GL_TRUE,
+            value,
+        )
