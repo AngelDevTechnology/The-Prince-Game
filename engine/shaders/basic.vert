@@ -10,7 +10,7 @@ void main()
 
     gl_Position = vec4(
         a_position.x + offset,
-        a_position.y,
+        a_position.y + offset,
         a_position.z,
         1.0
     );
