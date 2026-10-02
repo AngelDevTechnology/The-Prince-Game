@@ -81,7 +81,11 @@ def main() -> None:
             current_time = time.perf_counter() - start_time
 
             model = (
+<<<<<<< HEAD
                 Mat4.translation(Vec3(math.cos(current_time) * 1, math.sin(current_time) * 1, -2.0))
+=======
+                Mat4.translation(Vec3(math.sin(current_time) * 0.5, math.cos(current_time)* 0.5, -2.0))
+>>>>>>> 82db334 (Minor changes.)
                 @ Mat4.rotation_y(current_time)
                 @ Mat4.rotation_z(current_time * 0.5)
             )

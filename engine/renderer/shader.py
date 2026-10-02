@@ -166,12 +166,7 @@ class Shader:
                 matrix.m20, matrix.m21, matrix.m22, matrix.m23,
                 matrix.m30, matrix.m31, matrix.m32, matrix.m33,
             ],
-            dtype=np.float32,
+            dtype=np.float32
         )
 
-        glUniformMatrix4fv(
-            location,
-            1,
-            GL_TRUE,
-            value,
-        )
+        glUniformMatrix4fv(location, 1, GL_TRUE, value)

@@ -67,10 +67,10 @@ class Mat4:
     @classmethod
     def scale(cls, scale: Vec3) -> Mat4:
         return cls(
-            scale.x, 0.0, 0.0, 0.0,
-            0.0, scale.y, 0.0, 0.0,
-            0.0, 0.0, scale.z, 0.0,
-            0.0, 0.0, 0.0, 1.0,
+            scale.x, 0.0    , 0.0    , 0.0,
+            0.0    , scale.y, 0.0    , 0.0,
+            0.0    , 0.0    , scale.z, 0.0,
+            0.0    , 0.0    , 0.0    , 1.0,
         )
 
     @classmethod
@@ -80,8 +80,8 @@ class Mat4:
 
         return cls(
             1.0, 0.0, 0.0, 0.0,
-            0.0, c, -s, 0.0,
-            0.0, s, c, 0.0,
+            0.0,   c,  -s, 0.0,
+            0.0,   s,   c, 0.0,
             0.0, 0.0, 0.0, 1.0,
         )
 
@@ -91,9 +91,9 @@ class Mat4:
         s = math.sin(angle)
 
         return cls(
-            c, 0.0, s, 0.0,
+            c  , 0.0,   s, 0.0,
             0.0, 1.0, 0.0, 0.0,
-            -s, 0.0, c, 0.0,
+            -s , 0.0,   c, 0.0,
             0.0, 0.0, 0.0, 1.0,
         )
 
@@ -103,8 +103,8 @@ class Mat4:
         s = math.sin(angle)
 
         return cls(
-            c, -s, 0.0, 0.0,
-            s, c, 0.0, 0.0,
+            c  ,  -s, 0.0, 0.0,
+            s  ,   c, 0.0, 0.0,
             0.0, 0.0, 1.0, 0.0,
             0.0, 0.0, 0.0, 1.0,
         )
@@ -129,12 +129,10 @@ class Mat4:
         f = 1.0 / math.tan(fov * 0.5)
 
         return cls(
-            f / aspect, 0.0, 0.0, 0.0,
-            0.0, f, 0.0, 0.0,
-            0.0, 0.0,
-            (far + near) / (near - far),
-            (2.0 * far * near) / (near - far),
-            0.0, 0.0, -1.0, 0.0,
+            f / aspect, 0.0,             0.0            ,                   0.0,
+            0.0       , f  ,             0.0            ,                   0.0,
+            0.0       , 0.0, (far + near) / (near - far), (2.0 * far * near) / (near - far),
+            0.0       , 0.0,            -1.0            ,                   0.0
         )
 
     @classmethod
