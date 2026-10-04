@@ -1,11 +1,15 @@
-class Courtisan:
-    def __init__(self, idPNJ, nom, role, ambition, loyaute, est_joueur):
-        self.idPNJ = idPNJ
-        self.nom = nom
-        self.role = role
-        self.ambition = ambition
-        self.loyaute = loyaute
-        self.est_joueur = est_joueur
+from models.character import Character
 
-    def __repr__(self):
-        return f"id = {self.idPNJ}, nom = {self.nom}, role = {self.role}, ambition = {self.ambition}, loyaute = {self.loyaute}, est_joueur = {self.est_joueur}"
+
+class Courtier(Character):
+    
+    def __init__(self, character_id, name, age, ambition, loyalty, is_player=False, influence=0):
+        super().__init__(character_id, name, age, ambition, loyalty, is_player)
+        self.influence = influence
+
+
+"""
+from models.courtier import Courtier
+
+ardouin = Courtier(character_id=1, name="Ardouin", age=35, ambition=80, loyalty=60, influence=75)
+"""
