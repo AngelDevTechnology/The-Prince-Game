@@ -23,13 +23,15 @@ class Vec3:
         return self * scalar
 
     def __truediv__(self, scalar: float) -> Vec3:
+        if scalar == 0:
+            raise ZeroDivisionError("Cannot divide by zero")
         return Vec3(self.x / scalar, self.y / scalar, self.z / scalar)
 
     def __neg__(self) -> Vec3:
         return Vec3(-self.x, -self.y, -self.z)
 
     def length(self) -> float:
-        return math.sqrt(self.x**2 + self.y**2 + self.z**2)
+        return math.hypot(self.x, self.y, self.z)
 
     def length_squared(self) -> float:
         return self.x**2 + self.y**2 + self.z**2
@@ -51,4 +53,4 @@ class Vec3:
         )
 
     def distance_to(self, other: Vec3) -> float:
-        return math.sqrt((self.x - other.x)**2 + (self.y - other.y)**2 + (self.z - other.z)**2)
+        return math.hypot(self.x - other.x, self.y - other.y, self.z - other.z)

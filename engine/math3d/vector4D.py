@@ -60,7 +60,7 @@ class Vec4:
         )
 
     def length(self) -> float:
-        return math.sqrt(self.length_squared())
+        return math.hypot(self.x, self.y, self.z, self.w)
 
     def length_squared(self) -> float:
         return (
