@@ -1,28 +1,28 @@
 import sqlite3
-from models.courtisan import  Courtisan
+from engine.models.courtier import  Courtier
 from pathlib import Path
 
-chemin_bdd = Path(__file__).parent / "The_prince.db"
-conn = sqlite3.connect(chemin_bdd)
+path_bdd = Path(__file__).parent / "The_prince.db"
+conn = sqlite3.connect(path_bdd)
 cur = conn.cursor()
 
 
 cur.execute("SELECT * FROM PNJ")
-resultats = cur.fetchall()
-print(resultats)
+result = cur.fetchall()
+print(result)
 
 
 
 
 
-premier_tuple = resultats[0]
-premier_courtisan = Courtisan(
-    premier_tuple[0],
-    premier_tuple[1],
-    premier_tuple[2],
-    premier_tuple[3],
-    premier_tuple[4],
-    premier_tuple[5]
+first_tuple = result[0]
+first_courtier = Courtier(
+    first_tuple[0],
+    first_tuple[1],
+    first_tuple[2],
+    first_tuple[3],
+    first_tuple[4],
+    first_tuple[5]
 )
-print(premier_courtisan)
-print(premier_courtisan.nom)
+print(first_courtier)
+print(first_courtier.name)
