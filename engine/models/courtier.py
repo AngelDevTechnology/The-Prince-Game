@@ -1,7 +1,7 @@
 from engine.models.character import Character
 
 
-class Courtier(Character):
+class Courtier(Character): #create class coutisan
     
     def __init__(self, character_id, name, age, ambition, loyalty, is_player=False, influence=0):
         super().__init__(character_id, name, age, ambition, loyalty, is_player)

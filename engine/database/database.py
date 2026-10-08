@@ -24,5 +24,5 @@ first_courtier = Courtier(
     first_tuple[4],
     first_tuple[5]
 )
-print(first_courtier)
+print(first_courtier) 
 print(first_courtier.name)
