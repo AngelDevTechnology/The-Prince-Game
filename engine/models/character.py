@@ -1,8 +1,8 @@
 class Character:
-    def __init__(self, character_id, name, age, ambition, loyalty, is_player=False):
+    def __init__(self, character_id, name, role, ambition, loyalty, is_player=False):
         self.character_id = character_id
         self.name = name
-        self.age = age
+        self.role = role
 
         self.ambition = ambition
         self.loyalty = loyalty
@@ -11,3 +11,6 @@ class Character:
 
         self.relationships = {}
         self.memories = []
+
+
+        
