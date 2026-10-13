@@ -8,7 +8,7 @@ class Courtier(Character): #create class coutisan
         self.influence = influence
 
     def __repr__(self):
-        return f"{self.character_id}, {self.name}, role : {self.role}, ambition : {self.ambition}, loyalty : {self.loyalty}, is it a player : {self.is_player}, influence : {self.influence}"
+        return f"{self.character_id}, {self.name}, role : {self.role}, ambition : {self.ambition}, loyalty : {self.loyalty}, is a player : {self.is_player}, influence : {self.influence}"
 
 
 """
