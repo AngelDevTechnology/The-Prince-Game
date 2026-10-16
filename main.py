@@ -63,14 +63,23 @@ def main() -> None:
         shader.use()
 
         shader.set_vec3("color", (0.8, 0.2, 1.0))
+        shader.set_vec3("viewPos", (0.0, 0.0, 0.0))
+
+        lights = [
+            # Position           Color
+            (( 2.0,  2.0,  1.0), (1.0, 1.0, 1.0)),  # White
+            ((-2.0,  1.0,  0.0), (1.0, 0.15, 0.1)), # Red
+            (( 0.0, -1.5,  1.5), (0.1, 0.3, 1.0)),  # Blue
+        ]
+
+        shader.set_int("lightCount", len(lights))
+
+        for i, (position, light_color) in enumerate(lights):
+            shader.set_vec3(f"lightPositions[{i}]", position)
+            shader.set_vec3(f"lightColors[{i}]", light_color)
 
 
-        projection = Mat4.perspective(
-            math.radians(70.0),
-            window.width / window.height,
-            0.1,
-            100.0,
-        )
+        projection = Mat4.perspective(math.radians(70.0), window.width / window.height, 0.1, 100.0)
 
         start_time = time.perf_counter()
 
@@ -84,11 +93,13 @@ def main() -> None:
                 @ Mat4.rotation_z(current_time * 0.5)
             )
 
-            mvp = projection @ model
+            view = Mat4.identity()
 
             shader.use()
-            shader.set_mat4("mvp", mvp)
-            shader.set_float("time", current_time)
+
+            shader.set_mat4("model", model)
+            shader.set_mat4("view", view)
+            shader.set_mat4("projection", projection)
 
             renderer.clear()
             renderer.draw(shader, cube)

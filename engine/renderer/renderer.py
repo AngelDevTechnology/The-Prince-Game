@@ -29,9 +29,7 @@ class Renderer:
     @staticmethod
     def clear() -> None:
         glClear(
-            GL_COLOR_BUFFER_BIT
-            | GL_DEPTH_BUFFER_BIT
-        )
+            GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
     @staticmethod
     def draw(shader: Shader, mesh: Mesh) -> None:

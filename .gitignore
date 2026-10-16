@@ -162,10 +162,5 @@ Desktop.ini
 tmp/
 temp/
 .cache/
-
-# ============================================================
-#                           uv
-# ============================================================
-
-# uv crée généralement .venv/, déjà ignoré ci-dessus.
-# Le lockfile uv.lock DOIT rester versionné.
+.hypothesis/
+profile.prof
