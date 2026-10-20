@@ -5,47 +5,13 @@ from engine.renderer.window import Window
 from engine.renderer.shader import Shader
 from engine.renderer.mesh import Mesh
 from engine.renderer.renderer import Renderer
+from engine.renderer.loader import load_mesh_data
 from engine.math3d.mat4D import Mat4
 from engine.math3d.vector3D import Vec3
 
 
-vertices = [
-    -0.5, -0.5, -0.5,  # 0
-     0.5, -0.5, -0.5,  # 1
-     0.5,  0.5, -0.5,  # 2
-    -0.5,  0.5, -0.5,  # 3
 
-    -0.5, -0.5,  0.5,  # 4
-     0.5, -0.5,  0.5,  # 5
-     0.5,  0.5,  0.5,  # 6
-    -0.5,  0.5,  0.5,  # 7
-]
-
-indices = [
-    # Avant
-    4, 5, 6,
-    4, 6, 7,
-
-    # Arrière
-    1, 0, 3,
-    1, 3, 2,
-
-    # Gauche
-    0, 4, 7,
-    0, 7, 3,
-
-    # Droite
-    5, 1, 2,
-    5, 2, 6,
-
-    # Dessus
-    3, 7, 6,
-    3, 6, 2,
-
-    # Dessous
-    0, 1, 5,
-    0, 5, 4,
-]
+positions, indices = load_mesh_data("911_scene.obj")
 
 
 def main() -> None:
@@ -57,7 +23,7 @@ def main() -> None:
         "engine/shaders/basic.frag",
     )
 
-    cube = Mesh(vertices, indices)
+    mesh = Mesh(positions, indices)
 
     try:
         shader.use()
@@ -102,11 +68,11 @@ def main() -> None:
             shader.set_mat4("projection", projection)
 
             renderer.clear()
-            renderer.draw(shader, cube)
+            renderer.draw(shader, mesh)
             window.update()
 
     finally:
-        cube.destroy()
+        mesh.destroy()
         shader.delete()
         window.destroy()
 

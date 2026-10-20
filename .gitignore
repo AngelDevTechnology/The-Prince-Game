@@ -164,3 +164,5 @@ temp/
 .cache/
 .hypothesis/
 profile.prof
+*.c
+*.so
