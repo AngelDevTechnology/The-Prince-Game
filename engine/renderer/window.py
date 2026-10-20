@@ -8,6 +8,7 @@ class Window:
 
         monitor = self._choose_monitor()
         video_mode = glfw.get_video_mode(monitor)
+
         if video_mode is None:
             glfw.terminate()
             raise RuntimeError("Impossible de récupérer le mode vidéo")
@@ -23,38 +24,40 @@ class Window:
         glfw.make_context_current(self.handle)
         glfw.swap_interval(1)
 
-
+        # Capture la souris pour contrôler la caméra.
+        glfw.set_input_mode(self.handle, glfw.CURSOR, glfw.CURSOR_DISABLED)
 
     @staticmethod
     def _choose_monitor():
         monitors = glfw.get_monitors()
 
-        i = 0
-        for monitor in monitors:
+        if not monitors:
+            raise RuntimeError("Aucun moniteur détecté")
+
+        for i, monitor in enumerate(monitors):
             print(i, glfw.get_monitor_name(monitor))
-            i += 1  
 
         choice = int(input("Moniteur : "))
+
+        if not 0 <= choice < len(monitors):
+            raise ValueError("Indice de moniteur invalide")
+
         return monitors[choice]
 
-
+    def set_camera(self, camera) -> None:
+        glfw.set_cursor_pos_callback(self.handle, camera.handle_mouse)
 
     def should_close(self) -> bool:
         return glfw.window_should_close(self.handle)
 
-
-
     def update(self) -> None:
         glfw.poll_events()
 
-        if (glfw.get_key(self.handle, glfw.KEY_ESCAPE) == glfw.PRESS and glfw.get_key(self.handle, glfw.KEY_LEFT_CONTROL) == glfw.PRESS):
+        if glfw.get_key(self.handle, glfw.KEY_ESCAPE) == glfw.PRESS and glfw.get_key(self.handle, glfw.KEY_LEFT_CONTROL) == glfw.PRESS:
             glfw.set_window_should_close(self.handle, True)
 
         glfw.swap_buffers(self.handle)
 
-
-
     def destroy(self) -> None:
         glfw.destroy_window(self.handle)
         glfw.terminate()
-

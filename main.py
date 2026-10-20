@@ -5,6 +5,7 @@ from engine.renderer.window import Window
 from engine.renderer.shader import Shader
 from engine.renderer.mesh import Mesh
 from engine.renderer.renderer import Renderer
+from engine.renderer.camera import Camera
 from engine.renderer.loader import load_mesh_data
 from engine.math3d.mat4D import Mat4
 from engine.math3d.vector3D import Vec3
@@ -16,6 +17,9 @@ positions, indices = load_mesh_data("911_scene.obj")
 
 def main() -> None:
     window = Window("The Prince")
+    camera = Camera()
+    window.set_camera(camera)
+
     renderer = Renderer()
 
     shader = Shader(
@@ -45,7 +49,7 @@ def main() -> None:
             shader.set_vec3(f"lightColors[{i}]", light_color)
 
 
-        projection = Mat4.perspective(math.radians(70.0), window.width / window.height, 0.1, 100.0)
+        projection = camera.get_projection_matrix(window.width / window.height)
 
         start_time = time.perf_counter()
 
@@ -59,7 +63,7 @@ def main() -> None:
                 @ Mat4.rotation_z(current_time * 0.5)
             )
 
-            view = Mat4.identity()
+            view = camera.get_view_matrix()
 
             shader.use()
 
