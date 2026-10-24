@@ -1,14 +1,36 @@
-
 from __future__ import annotations
 
 import ctypes
 
 import numpy as np
-from OpenGL.GL import *
+from OpenGL.GL import (
+    GL_ARRAY_BUFFER,
+    GL_ELEMENT_ARRAY_BUFFER,
+    GL_FALSE,
+    GL_FLOAT,
+    GL_STATIC_DRAW,
+    GL_TRIANGLES,
+    GL_UNSIGNED_INT,
+    glBindBuffer,
+    glBindVertexArray,
+    glBufferData,
+    glDeleteBuffers,
+    glDeleteVertexArrays,
+    glDrawArrays,
+    glDrawElements,
+    glEnableVertexAttribArray,
+    glGenBuffers,
+    glGenVertexArrays,
+    glVertexAttribPointer,
+)
 
 
 class Mesh:
-    def __init__(self, vertices: np.ndarray | list[float], indices: np.ndarray | list[int] | None = None) -> None:
+    def __init__(
+        self,
+        vertices: np.ndarray | list[float],
+        indices: np.ndarray | list[int] | None = None,
+    ) -> None:
         # Accepte une liste plate ou un tableau de forme (N, 3).
         positions = np.asarray(vertices, dtype=np.float32)
 
@@ -50,18 +72,21 @@ class Mesh:
         self.normals = self._compute_normals()
 
         # Chaque sommet contient : position (xyz) + normale (xyz).
-        self.vertex_data = np.ascontiguousarray(np.concatenate((self.positions, self.normals), axis=1), dtype=np.float32)
+        self.vertex_data = np.ascontiguousarray(
+            np.concatenate((self.positions, self.normals), axis=1), dtype=np.float32
+        )
 
         # Crée les buffers OpenGL.
         self.vao = glGenVertexArrays(1)
         self.vbo = glGenBuffers(1)
-        self.ebo = (glGenBuffers(1)
-            if self.index_data is not None else None)
+        self.ebo = glGenBuffers(1) if self.index_data is not None else None
 
         glBindVertexArray(self.vao)
 
         glBindBuffer(GL_ARRAY_BUFFER, self.vbo)
-        glBufferData(GL_ARRAY_BUFFER, self.vertex_data.nbytes, self.vertex_data, GL_STATIC_DRAW)
+        glBufferData(
+            GL_ARRAY_BUFFER, self.vertex_data.nbytes, self.vertex_data, GL_STATIC_DRAW
+        )
 
         stride = 6 * self.vertex_data.itemsize
 
@@ -70,12 +95,24 @@ class Mesh:
         glEnableVertexAttribArray(0)
 
         # Attribut 1 : normale (xyz).
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, ctypes.c_void_p(3 * self.vertex_data.itemsize))
+        glVertexAttribPointer(
+            1,
+            3,
+            GL_FLOAT,
+            GL_FALSE,
+            stride,
+            ctypes.c_void_p(3 * self.vertex_data.itemsize),
+        )
         glEnableVertexAttribArray(1)
 
         if self.index_data is not None:
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self.ebo)
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, self.index_data.nbytes, self.index_data, GL_STATIC_DRAW)
+            glBufferData(
+                GL_ELEMENT_ARRAY_BUFFER,
+                self.index_data.nbytes,
+                self.index_data,
+                GL_STATIC_DRAW,
+            )
 
         glBindBuffer(GL_ARRAY_BUFFER, 0)
         glBindVertexArray(0)
@@ -85,7 +122,9 @@ class Mesh:
 
         triangles = (
             self.index_data.reshape(-1, 3)
-            if self.index_data is not None else np.arange(len(self.positions)).reshape(-1, 3))
+            if self.index_data is not None
+            else np.arange(len(self.positions)).reshape(-1, 3)
+        )
 
         for i0, i1, i2 in triangles:
             a, b, c = self.positions[[i0, i1, i2]]

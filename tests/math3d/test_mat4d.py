@@ -1,18 +1,22 @@
 import math
 
 import pytest
-from hypothesis import given, strategies as st
+from hypothesis import given
+from hypothesis import strategies as st
 
-from engine.math3d.mat4D import Mat4
-from engine.math3d.vector3D import Vec3
-from engine.math3d.vector4D import Vec4
+from engine.math3d.mat4d import Mat4
+from engine.math3d.vector3d import Vec3
+from engine.math3d.vector4d import Vec4
 
-
-float_strategy = st.floats(min_value=-10.0, max_value=10.0, allow_nan=False, allow_infinity=False)
+float_strategy = st.floats(
+    min_value=-10.0, max_value=10.0, allow_nan=False, allow_infinity=False
+)
 
 integer_strategy = st.integers(min_value=-5, max_value=5)
 
-angle_strategy = st.floats(min_value=-2 * math.pi, max_value=2 * math.pi, allow_nan=False, allow_infinity=False)
+angle_strategy = st.floats(
+    min_value=-2 * math.pi, max_value=2 * math.pi, allow_nan=False, allow_infinity=False
+)
 
 
 def assert_mat4_close(actual: Mat4, expected: Mat4):
@@ -36,10 +40,22 @@ def assert_mat4_close(actual: Mat4, expected: Mat4):
 
 def test_mat4_identity():
     assert Mat4.identity() == Mat4(
-        1.0, 0.0, 0.0, 0.0,
-        0.0, 1.0, 0.0, 0.0,
-        0.0, 0.0, 1.0, 0.0,
-        0.0, 0.0, 0.0, 1.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
     )
 
 
@@ -57,15 +73,37 @@ def test_mat4_translation(x: float, y: float, z: float):
     matrix = Mat4.translation(position)
 
     assert matrix == Mat4(
-        1.0, 0.0, 0.0, x,
-        0.0, 1.0, 0.0, y,
-        0.0, 0.0, 1.0, z,
-        0.0, 0.0, 0.0, 1.0,
+        1.0,
+        0.0,
+        0.0,
+        x,
+        0.0,
+        1.0,
+        0.0,
+        y,
+        0.0,
+        0.0,
+        1.0,
+        z,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
     )
 
 
-@given(float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy)
-def test_mat4_scale(sx: float, sy: float, sz: float, x: float, y: float, z: float, w: float):
+@given(
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+)
+def test_mat4_scale(
+    sx: float, sy: float, sz: float, x: float, y: float, z: float, w: float
+):
     scale = Vec3(sx, sy, sz)
     matrix = Mat4.scale(scale)
     vector = Vec4(x, y, z, w)
@@ -80,10 +118,22 @@ def test_mat4_rotation_x(angle: float):
     s = math.sin(angle)
 
     assert matrix == Mat4(
-        1.0, 0.0, 0.0, 0.0,
-        0.0, c, -s, 0.0,
-        0.0, s, c, 0.0,
-        0.0, 0.0, 0.0, 1.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        c,
+        -s,
+        0.0,
+        0.0,
+        s,
+        c,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
     )
 
 
@@ -94,10 +144,22 @@ def test_mat4_rotation_y(angle: float):
     s = math.sin(angle)
 
     assert matrix == Mat4(
-        c, 0.0, s, 0.0,
-        0.0, 1.0, 0.0, 0.0,
-        -s, 0.0, c, 0.0,
-        0.0, 0.0, 0.0, 1.0,
+        c,
+        0.0,
+        s,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        -s,
+        0.0,
+        c,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
     )
 
 
@@ -108,22 +170,72 @@ def test_mat4_rotation_z(angle: float):
     s = math.sin(angle)
 
     assert matrix == Mat4(
-        c, -s, 0.0, 0.0,
-        s, c, 0.0, 0.0,
-        0.0, 0.0, 1.0, 0.0,
-        0.0, 0.0, 0.0, 1.0,
+        c,
+        -s,
+        0.0,
+        0.0,
+        s,
+        c,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
     )
 
 
 @given(
-    float_strategy, float_strategy, float_strategy, float_strategy,
-    float_strategy, float_strategy, float_strategy, float_strategy,
-    float_strategy, float_strategy, float_strategy, float_strategy,
-    float_strategy, float_strategy, float_strategy, float_strategy,
-    float_strategy, float_strategy, float_strategy, float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
 )
-def test_mat4_mul_vector(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33, x, y, z, w):
-    matrix = Mat4(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33)
+def test_mat4_mul_vector(
+    m00,
+    m01,
+    m02,
+    m03,
+    m10,
+    m11,
+    m12,
+    m13,
+    m20,
+    m21,
+    m22,
+    m23,
+    m30,
+    m31,
+    m32,
+    m33,
+    x,
+    y,
+    z,
+    w,
+):
+    matrix = Mat4(
+        m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33
+    )
     vector = Vec4(x, y, z, w)
 
     assert matrix @ vector == Vec4(
@@ -135,21 +247,79 @@ def test_mat4_mul_vector(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, 
 
 
 @given(
-    float_strategy, float_strategy, float_strategy, float_strategy,
-    float_strategy, float_strategy, float_strategy, float_strategy,
-    float_strategy, float_strategy, float_strategy, float_strategy,
-    float_strategy, float_strategy, float_strategy, float_strategy,
-    float_strategy, float_strategy, float_strategy, float_strategy,
-    float_strategy, float_strategy, float_strategy, float_strategy,
-    float_strategy, float_strategy, float_strategy, float_strategy,
-    float_strategy, float_strategy, float_strategy, float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
 )
 def test_mat4_mul_matrix(
-    a00, a01, a02, a03, a10, a11, a12, a13, a20, a21, a22, a23, a30, a31, a32, a33,
-    b00, b01, b02, b03, b10, b11, b12, b13, b20, b21, b22, b23, b30, b31, b32, b33,
+    a00,
+    a01,
+    a02,
+    a03,
+    a10,
+    a11,
+    a12,
+    a13,
+    a20,
+    a21,
+    a22,
+    a23,
+    a30,
+    a31,
+    a32,
+    a33,
+    b00,
+    b01,
+    b02,
+    b03,
+    b10,
+    b11,
+    b12,
+    b13,
+    b20,
+    b21,
+    b22,
+    b23,
+    b30,
+    b31,
+    b32,
+    b33,
 ):
-    matrix = Mat4(a00, a01, a02, a03, a10, a11, a12, a13, a20, a21, a22, a23, a30, a31, a32, a33)
-    other = Mat4(b00, b01, b02, b03, b10, b11, b12, b13, b20, b21, b22, b23, b30, b31, b32, b33)
+    matrix = Mat4(
+        a00, a01, a02, a03, a10, a11, a12, a13, a20, a21, a22, a23, a30, a31, a32, a33
+    )
+    other = Mat4(
+        b00, b01, b02, b03, b10, b11, b12, b13, b20, b21, b22, b23, b30, b31, b32, b33
+    )
 
     expected = Mat4(
         a00 * b00 + a01 * b10 + a02 * b20 + a03 * b30,
@@ -174,42 +344,102 @@ def test_mat4_mul_matrix(
 
 
 @given(
-    float_strategy, float_strategy, float_strategy, float_strategy,
-    float_strategy, float_strategy, float_strategy, float_strategy,
-    float_strategy, float_strategy, float_strategy, float_strategy,
-    float_strategy, float_strategy, float_strategy, float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
 )
-def test_mat4_transpose(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33):
-    matrix = Mat4(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33)
+def test_mat4_transpose(
+    m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33
+):
+    matrix = Mat4(
+        m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33
+    )
 
     assert matrix.transpose() == Mat4(
-        m00, m10, m20, m30,
-        m01, m11, m21, m31,
-        m02, m12, m22, m32,
-        m03, m13, m23, m33,
+        m00,
+        m10,
+        m20,
+        m30,
+        m01,
+        m11,
+        m21,
+        m31,
+        m02,
+        m12,
+        m22,
+        m32,
+        m03,
+        m13,
+        m23,
+        m33,
     )
 
 
 @given(
-    float_strategy, float_strategy, float_strategy, float_strategy,
-    float_strategy, float_strategy, float_strategy, float_strategy,
-    float_strategy, float_strategy, float_strategy, float_strategy,
-    float_strategy, float_strategy, float_strategy, float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
 )
-def test_mat4_transpose_twice(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33):
-    matrix = Mat4(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33)
+def test_mat4_transpose_twice(
+    m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33
+):
+    matrix = Mat4(
+        m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33
+    )
 
     assert matrix.transpose().transpose() == matrix
 
 
 @given(
-    integer_strategy, integer_strategy, integer_strategy, integer_strategy,
-    integer_strategy, integer_strategy, integer_strategy, integer_strategy,
-    integer_strategy, integer_strategy, integer_strategy, integer_strategy,
-    integer_strategy, integer_strategy, integer_strategy, integer_strategy,
+    integer_strategy,
+    integer_strategy,
+    integer_strategy,
+    integer_strategy,
+    integer_strategy,
+    integer_strategy,
+    integer_strategy,
+    integer_strategy,
+    integer_strategy,
+    integer_strategy,
+    integer_strategy,
+    integer_strategy,
+    integer_strategy,
+    integer_strategy,
+    integer_strategy,
+    integer_strategy,
 )
-def test_mat4_inverse(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33):
-    matrix = Mat4(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33)
+def test_mat4_inverse(
+    m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33
+):
+    matrix = Mat4(
+        m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33
+    )
 
     try:
         inverse = matrix.inverse()
@@ -294,10 +524,22 @@ def test_mat4_perspective(fov: float, aspect: float, near: float, far: float):
     f = 1.0 / math.tan(fov * 0.5)
 
     expected = Mat4(
-        f / aspect, 0.0, 0.0, 0.0,
-        0.0, f, 0.0, 0.0,
-        0.0, 0.0, (far + near) / (near - far), (2.0 * far * near) / (near - far),
-        0.0, 0.0, -1.0, 0.0,
+        f / aspect,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        f,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        (far + near) / (near - far),
+        (2.0 * far * near) / (near - far),
+        0.0,
+        0.0,
+        -1.0,
+        0.0,
     )
 
     assert_mat4_close(matrix, expected)
@@ -326,14 +568,28 @@ def test_mat4_orthographic_invalid_near_far():
     st.floats(min_value=-10.0, max_value=-0.1, allow_nan=False, allow_infinity=False),
     st.floats(min_value=0.1, max_value=10.0, allow_nan=False, allow_infinity=False),
 )
-def test_mat4_orthographic(left: float, right: float, bottom: float, top: float, near: float, far: float):
+def test_mat4_orthographic(
+    left: float, right: float, bottom: float, top: float, near: float, far: float
+):
     matrix = Mat4.orthographic(left, right, bottom, top, near, far)
 
     expected = Mat4(
-        2.0 / (right - left), 0.0, 0.0, -(right + left) / (right - left),
-        0.0, 2.0 / (top - bottom), 0.0, -(top + bottom) / (top - bottom),
-        0.0, 0.0, -2.0 / (far - near), -(far + near) / (far - near),
-        0.0, 0.0, 0.0, 1.0,
+        2.0 / (right - left),
+        0.0,
+        0.0,
+        -(right + left) / (right - left),
+        0.0,
+        2.0 / (top - bottom),
+        0.0,
+        -(top + bottom) / (top - bottom),
+        0.0,
+        0.0,
+        -2.0 / (far - near),
+        -(far + near) / (far - near),
+        0.0,
+        0.0,
+        0.0,
+        1.0,
     )
 
     assert_mat4_close(matrix, expected)

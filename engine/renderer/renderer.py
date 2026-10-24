@@ -1,6 +1,20 @@
 from __future__ import annotations
 
-from OpenGL.GL import *
+from OpenGL.GL import (
+    GL_BACK,
+    GL_CCW,
+    GL_COLOR_BUFFER_BIT,
+    GL_CULL_FACE,
+    GL_DEPTH_BUFFER_BIT,
+    GL_DEPTH_TEST,
+    GL_LESS,
+    glClear,
+    glClearColor,
+    glCullFace,
+    glDepthFunc,
+    glEnable,
+    glFrontFace,
+)
 
 from .mesh import Mesh
 from .shader import Shader
@@ -28,8 +42,7 @@ class Renderer:
 
     @staticmethod
     def clear() -> None:
-        glClear(
-            GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+        glClear(int(GL_COLOR_BUFFER_BIT) | int(GL_DEPTH_BUFFER_BIT))
 
     @staticmethod
     def draw(shader: Shader, mesh: Mesh) -> None:

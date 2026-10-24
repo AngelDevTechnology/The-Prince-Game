@@ -1,17 +1,21 @@
 import math
 
 import pytest
-from hypothesis import given, strategies as st
+from hypothesis import given
+from hypothesis import strategies as st
 
-from engine.math3d.mat3D import Mat3
-from engine.math3d.vector3D import Vec3
+from engine.math3d.mat3d import Mat3
+from engine.math3d.vector3d import Vec3
 
-
-float_strategy = st.floats(min_value=-10.0, max_value=10.0, allow_nan=False, allow_infinity=False)
+float_strategy = st.floats(
+    min_value=-10.0, max_value=10.0, allow_nan=False, allow_infinity=False
+)
 
 integer_strategy = st.integers(min_value=-10, max_value=10)
 
-angle_strategy = st.floats(min_value=-2 * math.pi, max_value=2 * math.pi, allow_nan=False, allow_infinity=False)
+angle_strategy = st.floats(
+    min_value=-2 * math.pi, max_value=2 * math.pi, allow_nan=False, allow_infinity=False
+)
 
 
 def assert_mat3_close(actual: Mat3, expected: Mat3):
@@ -65,7 +69,20 @@ def test_mat3_rotation_z(angle: float):
     assert matrix == Mat3(c, -s, 0.0, s, c, 0.0, 0.0, 0.0, 1.0)
 
 
-@given(float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy)
+@given(
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+)
 def test_mat3_mul_vector(m00, m01, m02, m10, m11, m12, m20, m21, m22, x, y, z):
     matrix = Mat3(m00, m01, m02, m10, m11, m12, m20, m21, m22)
     vector = Vec3(x, y, z)
@@ -77,8 +94,46 @@ def test_mat3_mul_vector(m00, m01, m02, m10, m11, m12, m20, m21, m22, x, y, z):
     )
 
 
-@given(float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy)
-def test_mat3_mul_matrix(a00, a01, a02, a10, a11, a12, a20, a21, a22, b00, b01, b02, b10, b11, b12, b20, b21, b22):
+@given(
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+)
+def test_mat3_mul_matrix(
+    a00,
+    a01,
+    a02,
+    a10,
+    a11,
+    a12,
+    a20,
+    a21,
+    a22,
+    b00,
+    b01,
+    b02,
+    b10,
+    b11,
+    b12,
+    b20,
+    b21,
+    b22,
+):
     matrix = Mat3(a00, a01, a02, a10, a11, a12, a20, a21, a22)
     other = Mat3(b00, b01, b02, b10, b11, b12, b20, b21, b22)
 
@@ -97,25 +152,61 @@ def test_mat3_mul_matrix(a00, a01, a02, a10, a11, a12, a20, a21, a22, b00, b01, 
     assert matrix @ other == expected
 
 
-@given(float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy)
+@given(
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+)
 def test_mat3_transpose(m00, m01, m02, m10, m11, m12, m20, m21, m22):
     matrix = Mat3(m00, m01, m02, m10, m11, m12, m20, m21, m22)
 
     assert matrix.transpose() == Mat3(
-        m00, m10, m20,
-        m01, m11, m21,
-        m02, m12, m22,
+        m00,
+        m10,
+        m20,
+        m01,
+        m11,
+        m21,
+        m02,
+        m12,
+        m22,
     )
 
 
-@given(float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy)
+@given(
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+)
 def test_mat3_transpose_twice(m00, m01, m02, m10, m11, m12, m20, m21, m22):
     matrix = Mat3(m00, m01, m02, m10, m11, m12, m20, m21, m22)
 
     assert matrix.transpose().transpose() == matrix
 
 
-@given(float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy)
+@given(
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+)
 def test_mat3_determinant(m00, m01, m02, m10, m11, m12, m20, m21, m22):
     matrix = Mat3(m00, m01, m02, m10, m11, m12, m20, m21, m22)
 
@@ -128,7 +219,17 @@ def test_mat3_determinant(m00, m01, m02, m10, m11, m12, m20, m21, m22):
     assert matrix.determinant() == expected
 
 
-@given(integer_strategy, integer_strategy, integer_strategy, integer_strategy, integer_strategy, integer_strategy, integer_strategy, integer_strategy, integer_strategy)
+@given(
+    integer_strategy,
+    integer_strategy,
+    integer_strategy,
+    integer_strategy,
+    integer_strategy,
+    integer_strategy,
+    integer_strategy,
+    integer_strategy,
+    integer_strategy,
+)
 def test_mat3_inverse(m00, m01, m02, m10, m11, m12, m20, m21, m22):
     matrix = Mat3(m00, m01, m02, m10, m11, m12, m20, m21, m22)
     determinant = matrix.determinant()
@@ -163,7 +264,9 @@ def test_mat3_rotation_x_preserves_length(angle: float):
     matrix = Mat3.rotation_x(angle)
     vector = Vec3(1.0, 2.0, 3.0)
 
-    assert math.isclose((matrix @ vector).length(), vector.length(), rel_tol=1e-9, abs_tol=1e-9)
+    assert math.isclose(
+        (matrix @ vector).length(), vector.length(), rel_tol=1e-9, abs_tol=1e-9
+    )
 
 
 @given(angle_strategy)
@@ -171,7 +274,9 @@ def test_mat3_rotation_y_preserves_length(angle: float):
     matrix = Mat3.rotation_y(angle)
     vector = Vec3(1.0, 2.0, 3.0)
 
-    assert math.isclose((matrix @ vector).length(), vector.length(), rel_tol=1e-9, abs_tol=1e-9)
+    assert math.isclose(
+        (matrix @ vector).length(), vector.length(), rel_tol=1e-9, abs_tol=1e-9
+    )
 
 
 @given(angle_strategy)
@@ -179,4 +284,6 @@ def test_mat3_rotation_z_preserves_length(angle: float):
     matrix = Mat3.rotation_z(angle)
     vector = Vec3(1.0, 2.0, 3.0)
 
-    assert math.isclose((matrix @ vector).length(), vector.length(), rel_tol=1e-9, abs_tol=1e-9)
+    assert math.isclose(
+        (matrix @ vector).length(), vector.length(), rel_tol=1e-9, abs_tol=1e-9
+    )

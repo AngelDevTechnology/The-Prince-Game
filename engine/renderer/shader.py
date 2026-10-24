@@ -2,19 +2,38 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from OpenGL.GL import *
-from OpenGL.GL.shaders import compileProgram, compileShader
-
 import numpy as np
 from numpy.typing import NDArray
+from OpenGL.GL import (
+    GL_FALSE,
+    GL_FRAGMENT_SHADER,
+    GL_TRUE,
+    GL_VERTEX_SHADER,
+    glDeleteProgram,
+    glDeleteShader,
+    glGetUniformLocation,
+    glUniform1f,
+    glUniform1i,
+    glUniform1ui,
+    glUniform2f,
+    glUniform2i,
+    glUniform3f,
+    glUniform3i,
+    glUniform4f,
+    glUniform4i,
+    glUniformMatrix2fv,
+    glUniformMatrix3fv,
+    glUniformMatrix4fv,
+    glUseProgram,
+)
+from OpenGL.GL.shaders import compileProgram, compileShader
 
-from engine.math3d.mat4D import Mat4
+from engine.math3d.mat4d import Mat4
 
 FloatMatrix = NDArray[np.float32]
 
 
 class Shader:
-    """"""
     def __init__(self, vertex_path: str | Path, fragment_path: str | Path) -> None:
         Shader._validate_path([vertex_path, fragment_path])
 
@@ -27,15 +46,15 @@ class Shader:
         self.program_id: int = self._compile()
         self.uniform_locations: dict[str, int] = {}
 
-
     @staticmethod
     def _validate_path(file_paths: list[str | Path]) -> None:
         for file in file_paths:
             path = Path(file)
 
             if not path.is_file():
-                raise FileNotFoundError(f"The file '{path}' was not found or is not a file.")
-
+                raise FileNotFoundError(
+                    f"The file '{path}' was not found or is not a file."
+                )
 
     @staticmethod
     def _read_source(file_path: Path) -> str:
@@ -45,7 +64,6 @@ class Shader:
             raise ValueError(f"The file '{file_path}' is empty.")
 
         return file_source
-
 
     def _compile(self) -> int:
         vertex_shader = 0
@@ -71,7 +89,6 @@ class Shader:
             if fragment_shader:
                 glDeleteShader(fragment_shader)
 
-
     def _get_uniform_location(self, name: str) -> int:
         if name not in self.uniform_locations:
             location = glGetUniformLocation(self.program_id, name)
@@ -82,10 +99,8 @@ class Shader:
 
         return self.uniform_locations[name]
 
-
     def use(self) -> None:
         glUseProgram(self.program_id)
-
 
     def delete(self) -> None:
         if self.program_id != 0:
@@ -94,79 +109,77 @@ class Shader:
 
         self.uniform_locations.clear()
 
-
-
     def set_float(self, name: str, value: float) -> None:
         location = self._get_uniform_location(name)
         glUniform1f(location, value)
-    
-    
+
     def set_int(self, name: str, value: int) -> None:
         location = self._get_uniform_location(name)
         glUniform1i(location, value)
-
 
     def set_bool(self, name: str, value: bool) -> None:
         location = self._get_uniform_location(name)
         glUniform1i(location, int(value))
 
-
     def set_uint(self, name: str, value: int) -> None:
         location = self._get_uniform_location(name)
         glUniform1ui(location, value)
-
 
     def set_vec2(self, name: str, value: tuple[float, float]) -> None:
         location = self._get_uniform_location(name)
         glUniform2f(location, *value)
 
-
     def set_vec3(self, name: str, value: tuple[float, float, float]) -> None:
         location = self._get_uniform_location(name)
         glUniform3f(location, *value)
-
 
     def set_vec4(self, name: str, value: tuple[float, float, float, float]) -> None:
         location = self._get_uniform_location(name)
         glUniform4f(location, *value)
 
-
     def set_ivec2(self, name: str, value: tuple[int, int]) -> None:
         location = self._get_uniform_location(name)
         glUniform2i(location, *value)
-
 
     def set_ivec3(self, name: str, value: tuple[int, int, int]) -> None:
         location = self._get_uniform_location(name)
         glUniform3i(location, *value)
 
-
     def set_ivec4(self, name: str, value: tuple[int, int, int, int]) -> None:
         location = self._get_uniform_location(name)
         glUniform4i(location, *value)
-
 
     def set_mat2(self, name: str, value: FloatMatrix) -> None:
         location = self._get_uniform_location(name)
         glUniformMatrix2fv(location, 1, GL_FALSE, value)
 
-
     def set_mat3(self, name: str, value: FloatMatrix) -> None:
         location = self._get_uniform_location(name)
         glUniformMatrix3fv(location, 1, GL_FALSE, value)
-
 
     def set_mat4(self, name: str, matrix: Mat4) -> None:
         location = self._get_uniform_location(name)
 
         value = np.array(
             [
-                matrix.m00, matrix.m01, matrix.m02, matrix.m03,
-                matrix.m10, matrix.m11, matrix.m12, matrix.m13,
-                matrix.m20, matrix.m21, matrix.m22, matrix.m23,
-                matrix.m30, matrix.m31, matrix.m32, matrix.m33,
+                matrix.m00,
+                matrix.m01,
+                matrix.m02,
+                matrix.m03,
+                matrix.m10,
+                matrix.m11,
+                matrix.m12,
+                matrix.m13,
+                matrix.m20,
+                matrix.m21,
+                matrix.m22,
+                matrix.m23,
+                matrix.m30,
+                matrix.m31,
+                matrix.m32,
+                matrix.m33,
             ],
-            dtype=np.float32
+            dtype=np.float32,
         )
 
         glUniformMatrix4fv(location, 1, GL_TRUE, value)

@@ -11,6 +11,3 @@ class Character:
 
         self.relationships = {}
         self.memories = []
-
-
-        

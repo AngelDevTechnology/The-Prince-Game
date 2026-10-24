@@ -48,12 +48,15 @@ class Window:
         glfw.set_cursor_pos_callback(self.handle, camera.handle_mouse)
 
     def should_close(self) -> bool:
-        return glfw.window_should_close(self.handle)
+        return bool(glfw.window_should_close(self.handle))
 
     def update(self) -> None:
         glfw.poll_events()
 
-        if glfw.get_key(self.handle, glfw.KEY_ESCAPE) == glfw.PRESS and glfw.get_key(self.handle, glfw.KEY_LEFT_CONTROL) == glfw.PRESS:
+        if (
+            glfw.get_key(self.handle, glfw.KEY_ESCAPE) == glfw.PRESS
+            and glfw.get_key(self.handle, glfw.KEY_LEFT_CONTROL) == glfw.PRESS
+        ):
             glfw.set_window_should_close(self.handle, True)
 
         glfw.swap_buffers(self.handle)

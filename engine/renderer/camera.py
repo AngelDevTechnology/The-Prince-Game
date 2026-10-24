@@ -1,14 +1,21 @@
-
 from __future__ import annotations
-import glfw
-import numpy as np
+
 import math
+
+import numpy as np
+
+from engine.math3d.mat4d import Mat4
 from engine.math3d.quaternion import Quaternion
-from engine.math3d.mat4D import Mat4
 
 
 class Camera:
-    def __init__(self, position=(0.0, 0.0, 3.0), fov=60.0, near=0.1, far=1000.0,):
+    def __init__(
+        self,
+        position=(0.0, 0.0, 3.0),
+        fov=60.0,
+        near=0.1,
+        far=1000.0,
+    ):
         if not 0.0 < fov < 180.0:
             raise ValueError("fov must be between 0 and 180 degrees.")
         if not 0.0 < near < far:
@@ -36,15 +43,15 @@ class Camera:
         view[:3, 3] = -rotation @ self.position
         return Mat4(*view.flatten().tolist())
 
-
     def get_projection_matrix(self, aspect_ratio: float) -> Mat4:
-        return Mat4.perspective(math.radians(self.fov), aspect_ratio, self.near, self.far)
+        return Mat4.perspective(
+            math.radians(self.fov), aspect_ratio, self.near, self.far
+        )
 
     def rotate(self, axis: tuple[float, float, float], angle_rad: float) -> None:
         delta = Quaternion.from_axis_angle(axis, angle_rad)
 
         self.orientation = (delta * self.orientation).normalized()
-
 
     def update_orientation(self) -> None:
         yaw_q = Quaternion.from_axis_angle((0.0, 1.0, 0.0), np.radians(self.yaw))
@@ -52,7 +59,6 @@ class Camera:
         pitch_q = Quaternion.from_axis_angle((1.0, 0.0, 0.0), np.radians(self.pitch))
 
         self.orientation = (yaw_q * pitch_q).normalized()
-
 
     def handle_mouse(self, window, xpos: float, ypos: float) -> None:
         if self.first_mouse:

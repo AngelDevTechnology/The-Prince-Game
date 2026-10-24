@@ -1,13 +1,15 @@
 from math import hypot, sqrt
 
 import pytest
-from hypothesis import given, strategies as st
+from hypothesis import given
+from hypothesis import strategies as st
 
-from engine.math3d.vector3D import Vec3
-from engine.math3d.vector4D import Vec4
+from engine.math3d.vector3d import Vec3
+from engine.math3d.vector4d import Vec4
 
-
-float_strategy = st.floats(min_value=-1e6, max_value=1e6, allow_nan=False, allow_infinity=False)
+float_strategy = st.floats(
+    min_value=-1e6, max_value=1e6, allow_nan=False, allow_infinity=False
+)
 
 scalar_strategy = float_strategy
 
@@ -16,8 +18,19 @@ scalar_divisor_strategy = float_strategy.filter(lambda x: x != 0)
 non_zero_w_strategy = float_strategy.filter(lambda x: x != 0)
 
 
-@given(float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy)
-def test_vector4d_add(x: float, y: float, z: float, w: float, ox: float, oy: float, oz: float, ow: float):
+@given(
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+)
+def test_vector4d_add(
+    x: float, y: float, z: float, w: float, ox: float, oy: float, oz: float, ow: float
+):
     vector = Vec4(x, y, z, w)
     other = Vec4(ox, oy, oz, ow)
 
@@ -27,8 +40,19 @@ def test_vector4d_add(x: float, y: float, z: float, w: float, ox: float, oy: flo
     assert other + vector == expected
 
 
-@given(float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy)
-def test_vector4d_sub(x: float, y: float, z: float, w: float, ox: float, oy: float, oz: float, ow: float):
+@given(
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+)
+def test_vector4d_sub(
+    x: float, y: float, z: float, w: float, ox: float, oy: float, oz: float, ow: float
+):
     vector = Vec4(x, y, z, w)
     other = Vec4(ox, oy, oz, ow)
 
@@ -46,7 +70,13 @@ def test_vector4d_mul(x: float, y: float, z: float, w: float, scalar: float):
     assert scalar * vector == expected
 
 
-@given(float_strategy, float_strategy, float_strategy, float_strategy, scalar_divisor_strategy)
+@given(
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    scalar_divisor_strategy,
+)
 def test_vector4d_div(x: float, y: float, z: float, w: float, scalar: float):
     vector = Vec4(x, y, z, w)
 
@@ -57,7 +87,7 @@ def test_vector4d_div_zero():
     vector = Vec4(1.0, 2.0, 3.0, 4.0)
 
     with pytest.raises(ZeroDivisionError):
-        vector / 0
+        _ = vector / 0
 
 
 @given(float_strategy, float_strategy, float_strategy, float_strategy)
@@ -93,8 +123,19 @@ def test_vector4d_normalized(x: float, y: float, z: float, w: float):
     assert vector.normalized() == vector / sqrt(length_squared)
 
 
-@given(float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy)
-def test_vector4d_dot(x: float, y: float, z: float, w: float, ox: float, oy: float, oz: float, ow: float):
+@given(
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+)
+def test_vector4d_dot(
+    x: float, y: float, z: float, w: float, ox: float, oy: float, oz: float, ow: float
+):
     vector = Vec4(x, y, z, w)
     other = Vec4(ox, oy, oz, ow)
 

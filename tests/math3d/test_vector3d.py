@@ -1,16 +1,25 @@
 from math import hypot, sqrt
 
-from hypothesis import given, strategies as st
+from hypothesis import given
+from hypothesis import strategies as st
 
-from engine.math3d.vector3D import Vec3
+from engine.math3d.vector3d import Vec3
 
-
-float_strategy = st.floats(min_value=-1e6, max_value=1e6, allow_nan=False, allow_infinity=False)
+float_strategy = st.floats(
+    min_value=-1e6, max_value=1e6, allow_nan=False, allow_infinity=False
+)
 scalar_strategy = float_strategy
 scalar_divisor_strategy = float_strategy.filter(lambda x: x != 0)
 
 
-@given(float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy)
+@given(
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+)
 def test_vector3d_add(x: float, y: float, z: float, ox: float, oy: float, oz: float):
     print(x, y, z, ox, oy, oz)
     vector = Vec3(x, y, z)
@@ -20,7 +29,14 @@ def test_vector3d_add(x: float, y: float, z: float, ox: float, oy: float, oz: fl
     assert other + vector == expected
 
 
-@given(float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy)
+@given(
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+)
 def test_vector3d_sub(x: float, y: float, z: float, ox: float, oy: float, oz: float):
     print(x, y, z, ox, oy, oz)
     vector = Vec3(x, y, z)
@@ -79,7 +95,14 @@ def test_vector3d_normalized(x: float, y: float, z: float):
     assert vector.normalized() == vector / sqrt(length_squared)
 
 
-@given(float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy)
+@given(
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+)
 def test_vector3d_dot(x: float, y: float, z: float, ox: float, oy: float, oz: float):
     print(x, y, z, ox, oy, oz)
     vector = Vec3(x, y, z)
@@ -89,7 +112,14 @@ def test_vector3d_dot(x: float, y: float, z: float, ox: float, oy: float, oz: fl
     assert other.dot(vector) == expected
 
 
-@given(float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy)
+@given(
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+)
 def test_vector3d_cross(x: float, y: float, z: float, ox: float, oy: float, oz: float):
     print(x, y, z, ox, oy, oz)
     vector = Vec3(x, y, z)
@@ -98,8 +128,17 @@ def test_vector3d_cross(x: float, y: float, z: float, ox: float, oy: float, oz: 
     assert vector.cross(other) == expected
 
 
-@given(float_strategy, float_strategy, float_strategy, float_strategy, float_strategy, float_strategy)
-def test_vector3d_distance_to(x: float, y: float, z: float, ox: float, oy: float, oz: float):
+@given(
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+    float_strategy,
+)
+def test_vector3d_distance_to(
+    x: float, y: float, z: float, ox: float, oy: float, oz: float
+):
     print(x, y, z, ox, oy, oz)
     vector = Vec3(x, y, z)
     other = Vec3(ox, oy, oz)

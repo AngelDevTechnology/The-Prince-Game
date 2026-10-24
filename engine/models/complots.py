@@ -1,13 +1,11 @@
-import random
-from engine.models.courtier import Courtier
-
-dico_role = {'peasant' : 1, 'courtier' : 2, 'advisor' : 3, 'king' : 4}
+dico_role = {"peasant": 1, "courtier": 2, "advisor": 3, "king": 4}
 
 class Complot:
     def __init__(self, initiator, target):
         self.initiator = initiator
         self.target = target
         self.success = None
+        self.chance = self.success_chance()
 
     def __repr__(self):
         return f"initiator : {self.initiator.name}, target : {self.target.name}"
@@ -16,16 +14,7 @@ class Complot:
         grade_initiator = dico_role[self.initiator.role]
         grade_target = dico_role[self.target.role]
         gap = grade_target - grade_initiator
-        chance = 50 - 15 * gap
-
-
-
-
-
-
-
-
-
+        return max(0, min(100, 50 - 15 * gap))
 
 
 """

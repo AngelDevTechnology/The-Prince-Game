@@ -29,9 +29,11 @@ testpaths = ["tests"]
 
 [dependency-groups]
 dev = [
+    "basedpyright>=1.40.2",
     "cython>=3.3.0",
     "hypothesis>=6.168.1",
     "pytest>=9.1.1",
+    "ruff>=0.17.2",
     "setuptools>=84.2.1",
     "snakeviz>=2.2.2",
 ]
