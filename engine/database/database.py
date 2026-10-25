@@ -5,9 +5,9 @@ from engine.models.courtier import Courtier
 
 path_bdd = Path(__file__).parent / "The_prince.db"
 conn = sqlite3.connect(path_bdd)
-cur = conn.cursor()
 
 
+"""
 cur.execute("SELECT * FROM PNJ")
 result = cur.fetchall()
 print(result)
@@ -25,3 +25,37 @@ first_courtier = Courtier(
 print(first_tuple)
 print(first_courtier)
 print(first_courtier.name)
+"""
+
+primary_keys = {'PNJ' : 'idPNJ', 'complots' : 'idComplot', 'royaume' : 'id'}
+
+
+class Database:
+    def __init__(self, conn):
+        self.conn = conn
+        self.cur = self.conn.cursor()
+
+    def update(self, value, table, column, row_id):
+        self.cur.execute(f"UPDATE {table} SET {column} = ? WHERE {primary_keys[table]} = ?", (value, row_id))
+        self.conn.commit()  
+
+
+    def close(self):
+        self.conn.close()
+
+    def add(self, table, data):
+        if table not in primary_keys:
+            raise ValueError("table inconnue")
+        columns = ", ".join(data.keys())
+        placeholders = ", ".join("?" for _ in data)
+        self.cur.execute(f"INSERT INTO {table} ({columns}) VALUES ({placeholders})", tuple(data.values()))
+        self.conn.commit()
+        return self.cur.lastrowid
+
+
+if __name__ == "__main__":
+    db = Database(conn)
+    new_id = db.add("PNJ", {"nom": "Ardouin", "role": "courtier"})
+    print(new_id)
+    db.add("PNJ", {"role": "king"})
+    db.close()
