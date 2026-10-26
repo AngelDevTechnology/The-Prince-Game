@@ -1,3 +1,6 @@
+
+
+
 dico_role = {"peasant": 1, "courtier": 2, "advisor": 3, "king": 4}
 
 class Complot:
@@ -15,6 +18,8 @@ class Complot:
         grade_target = dico_role[self.target.role]
         gap = grade_target - grade_initiator
         return max(0, min(100, 50 - 15 * gap))
+
+
 
 
 """

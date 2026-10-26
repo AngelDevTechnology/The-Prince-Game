@@ -52,10 +52,24 @@ class Database:
         self.conn.commit()
         return self.cur.lastrowid
 
+    def get_all_characters(self):
+        self.cur.execute("SELECT * FROM PNJ")
+        rows = self.cur.fetchall()
+        characters = []
+        for row in rows:
+            characters.append(Courtier(row[0], row[1], row[2], row[3], row[4], row[5]))
+        return characters
 
+"""
 if __name__ == "__main__":
     db = Database(conn)
     new_id = db.add("PNJ", {"nom": "Ardouin", "role": "courtier"})
     print(new_id)
     db.add("PNJ", {"role": "king"})
+    db.close()
+"""
+
+if __name__ == "__main__":
+    db = Database(conn)
+    print(db.get_all_characters())
     db.close()
