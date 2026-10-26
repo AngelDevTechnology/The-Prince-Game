@@ -57,7 +57,7 @@ class Database:
         rows = self.cur.fetchall()
         characters = []
         for row in rows:
-            characters.append(Courtier(row[0], row[1], row[2], row[3], row[4], row[5]))
+            characters.append(f"|{Courtier(row[0], row[1], row[2], row[3], row[4], row[5])}|")
         return characters
 
 """
