@@ -2,7 +2,7 @@ import glfw
 
 
 class Window:
-    def __init__(self, title: str = "The Prince") -> None:
+    def __init__(self, title: str = "The Prince", toggle_cursor_key: int = 258) -> None:
         if not glfw.init():
             raise RuntimeError("Impossible d'initialiser GLFW")
 
@@ -24,8 +24,12 @@ class Window:
         glfw.make_context_current(self.handle)
         glfw.swap_interval(1)
 
-        # Capture la souris pour contrôler la caméra.
+        # camera mode
         glfw.set_input_mode(self.handle, glfw.CURSOR, glfw.CURSOR_DISABLED)
+        self.toggle_cursor_key = toggle_cursor_key
+        self.cursor_captured = True
+        self._toggle_key_was_pressed = False
+        self.camera = None
 
     @staticmethod
     def _choose_monitor():
@@ -45,20 +49,58 @@ class Window:
         return monitors[choice]
 
     def set_camera(self, camera) -> None:
-        glfw.set_cursor_pos_callback(self.handle, camera.handle_mouse)
+        self.camera = camera
+    
+        self.camera.cursor_captured = self.cursor_captured
+        self.camera.first_mouse = True
+
+    def change_cursor_mode(self) -> None:
+        self.cursor_captured = not self.cursor_captured
+        mode = (glfw.CURSOR_DISABLED if self.cursor_captured else glfw.CURSOR_NORMAL)
+
+        glfw.set_input_mode(self.handle, glfw.CURSOR, mode)
+
+        if self.camera is not None:
+            self.camera.cursor_captured = self.cursor_captured
+            self.camera.first_mouse = True
+
+    def get_cursor_position(self):
+        return glfw.get_cursor_pos(self.handle)
+    
+    def get_mouse_button(self, button):
+        return glfw.get_mouse_button(self.handle, button)
+    
+    def get_key_state(self, key):
+        return glfw.get_key(self.handle, key)
+
+    def handle_camera_mouse(self, glfw_window, xpos, ypos) -> None:
+        if self.cursor_captured and self.camera is not None:
+            self.camera.handle_mouse(glfw_window, xpos, ypos)
 
     def should_close(self) -> bool:
         return bool(glfw.window_should_close(self.handle))
 
-    def update(self) -> None:
+    def update(self):
         glfw.poll_events()
-
+    
+        pressed = glfw.get_key(
+            self.handle,
+            self.toggle_cursor_key
+        ) == glfw.PRESS
+    
+        if pressed and not self._toggle_key_was_pressed:
+            self.change_cursor_mode()
+    
+        self._toggle_key_was_pressed = pressed
+    
         if (
             glfw.get_key(self.handle, glfw.KEY_ESCAPE) == glfw.PRESS
             and glfw.get_key(self.handle, glfw.KEY_LEFT_CONTROL) == glfw.PRESS
         ):
             glfw.set_window_should_close(self.handle, True)
-
+    
+    
+    def swap_buffers(self):
         glfw.swap_buffers(self.handle)
 
     def destroy(self) -> None:

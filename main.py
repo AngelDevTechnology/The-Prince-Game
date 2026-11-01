@@ -1,6 +1,7 @@
 import math
 import time
 
+from engine.renderer.ui import ImGuiManager
 from engine.math3d.mat4d import Mat4
 from engine.math3d.vector3d import Vec3
 from engine.renderer.camera import Camera
@@ -9,15 +10,21 @@ from engine.renderer.mesh import Mesh
 from engine.renderer.renderer import Renderer
 from engine.renderer.shader import Shader
 from engine.renderer.window import Window
+from engine.database.database import Database, conn
 
 positions, indices = load_mesh_data("911_scene.obj")
 
 
 def main() -> None:
     window = Window("The Prince")
+    
+    database = Database(conn)
+    
     camera = Camera()
     window.set_camera(camera)
-
+    
+    imgui_manager = ImGuiManager(window, database)
+    
     renderer = Renderer()
 
     shader = Shader(
@@ -51,6 +58,7 @@ def main() -> None:
         start_time = time.perf_counter()
 
         while not window.should_close():
+            window.update()
             current_time = time.perf_counter() - start_time
 
             model = (
@@ -73,11 +81,18 @@ def main() -> None:
 
             renderer.clear()
             renderer.draw(shader, mesh)
-            window.update()
+            imgui_manager.render()
+            
+            window.swap_buffers()
+            
 
     finally:
         mesh.destroy()
         shader.delete()
+    
+        imgui_manager.shutdown()
+    
+        database.close()
         window.destroy()
 
 

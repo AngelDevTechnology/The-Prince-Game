@@ -116,6 +116,33 @@ wheels = [
 ]
 
 [[package]]
+name = "imgui"
+version = "2.0.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f1/aa/4abb0d3d6054da9a4390160fc25ca743a824263a9931cc6a95f30e3d75b4/imgui-2.0.0.tar.gz", hash = "sha256:2fbdb8eed3b8dbd7ea98af9e4c1c6582b0bc4da942a258de16333d8c653d67e1", size = 1473795, upload-time = "2023-04-19T16:46:44.547Z" }
+
+[package.optional-dependencies]
+glfw = [
+    { name = "glfw" },
+    { name = "pyopengl" },
+]
+
+[[package]]
+name = "imgui-bundle"
+version = "1.93.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/64/78/b5e7bf047f6202711d2bd9f9ffde31c28ca47a6c1cb0d9a744763ac6e749/imgui_bundle-1.93.0.tar.gz", hash = "sha256:10ad1dab8258a6787b4f07bb926b08d0efc648a7906242568c8dd778c5e719bf", size = 53834676, upload-time = "2026-10-21T19:14:13.943Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3f/d8/425def218700b73b22b6b84033f1f6ac207d5ba1c08f2edfb4d813a04a45/imgui_bundle-1.93.0-cp312-cp312-macosx_14_0_arm64.whl", hash = "sha256:14c4c20c4008d0afa62bb18dade248bc06113c2963f7cdf42856caf0e04eeeb2", size = 11256387, upload-time = "2026-10-21T19:13:14.025Z" },
+    { url = "https://files.pythonhosted.org/packages/96/4a/2b0044cf4b6dc68225cfcdf07631d3fe81ac53a35aab9abc83b8bd9b97a4/imgui_bundle-1.93.0-cp312-cp312-manylinux_2_28_aarch64.whl", hash = "sha256:64a38df08478d5305723700e92efba6ecc58d508598908b299ee949d79a7150e", size = 13273381, upload-time = "2026-10-21T19:13:15.789Z" },
+    { url = "https://files.pythonhosted.org/packages/35/05/744138ae49b9946b1e11b28a3d15dd59a8eb1c63cae2d1fe4f8d982166b5/imgui_bundle-1.93.0-cp312-cp312-manylinux_2_28_x86_64.whl", hash = "sha256:e994bfacb423468419ff25aac26e6c88af83d4a7c5b24209a24f3796340256c1", size = 14440334, upload-time = "2026-10-21T19:13:17.787Z" },
+    { url = "https://files.pythonhosted.org/packages/40/ea/a67d838435533c02afa2766a6cd68d63bc3ff50232bb5a15095b6ac6874e/imgui_bundle-1.93.0-cp312-cp312-musllinux_1_2_aarch64.whl", hash = "sha256:980146a51352068fbdaec4a14e24eafc32f4e8c54a93d856bd202c225221f4ee", size = 14230535, upload-time = "2026-10-21T19:13:19.975Z" },
+    { url = "https://files.pythonhosted.org/packages/83/07/20286c4043e3ca32d4d224dece857936b9d18eb41ae1a4107507d4e51ae8/imgui_bundle-1.93.0-cp312-cp312-musllinux_1_2_x86_64.whl", hash = "sha256:3d05e6c603d61344b727e0338fe7435d72c33ea2e6ce6e11b7fb5b09dc4ea674", size = 15276702, upload-time = "2026-10-21T19:13:21.869Z" },
+    { url = "https://files.pythonhosted.org/packages/26/da/af1f3e03d0cf8603ac2fde387cc5092fa108b090788978b2614aef97b6ea/imgui_bundle-1.93.0-cp312-cp312-win_amd64.whl", hash = "sha256:25f47367823867803d14aab95b3cfbb4f3df34a04727b4b9f8ee34c913fae178", size = 12495274, upload-time = "2026-10-21T19:13:23.634Z" },
+    { url = "https://files.pythonhosted.org/packages/d8/d0/d1f429c9ed03b043b934fd8d9c7d317b3ebf452885ce2e3418c046717eaf/imgui_bundle-1.93.0-cp312-cp312-win_arm64.whl", hash = "sha256:5a4e5f4136ca086eebae54c9a8bd2462d3f63b3141b01b344b8290701caf923c", size = 12182058, upload-time = "2026-10-21T19:13:25.716Z" },
+]
+
+[[package]]
 name = "iniconfig"
 version = "2.3.0"
 source = { registry = "https://pypi.org/simple" }
@@ -285,6 +312,8 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "glfw" },
+    { name = "imgui", extra = ["glfw"] },
+    { name = "imgui-bundle" },
     { name = "numpy" },
     { name = "pyopengl" },
     { name = "pyopengl-accelerate" },
@@ -304,6 +333,8 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "glfw", specifier = ">=2.10.2" },
+    { name = "imgui", extras = ["glfw"], specifier = ">=2.0.0" },
+    { name = "imgui-bundle", specifier = ">=1.93.0" },
     { name = "numpy", specifier = ">=2.5.3" },
     { name = "pyopengl", specifier = ">=3.1.10" },
     { name = "pyopengl-accelerate", specifier = ">=3.1.10" },

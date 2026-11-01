@@ -7,6 +7,8 @@ requires-python = ">=3.12,<3.13"
 
 dependencies = [
     "glfw>=2.10.2",
+    "imgui-bundle>=1.93.0",
+    "imgui[glfw]>=2.0.0",
     "numpy>=2.5.3",
     "pyopengl>=3.1.10",
     "pyopengl-accelerate>=3.1.10",
