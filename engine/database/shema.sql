@@ -9,33 +9,16 @@ CREATE TABLE IF NOT EXISTS PNJ (
 
 );
 
-
-
-CREATE TABLE IF NOT EXISTS complots (
-    idComplot INTEGER PRIMARY KEY AUTOINCREMENT,
-    initiateur_id INTEGER,
-    cible_id INTEGER,
-    reussi BOOLEAN,
-    FOREIGN KEY (initiateur_id) REFERENCES PNJ(idPNJ),
-    FOREIGN KEY (cible_id) REFERENCES PNJ(idPNJ)
-);
-
-
-CREATE TABLE IF NOT EXISTS royaume (
-    id INTEGER PRIMARY KEY CHECK (id = 1),
-    jours INTEGER DEFAULT 1
-);
 CREATE TABLE IF NOT EXISTS Plot (
     idplot INTEGER PRIMARY KEY AUTOINCREMENT,
-    initiator_id INTEGER REFERENCES PNJ(idPNJ),
-    target_id INTEGER REFERENCES PNJ(idPNJ),
+    initiator_id INTEGER,
+    target_id INTEGER,
     successful BOOLEAN CHECK(successful BETWEEN 0 AND 1),
     FOREIGN KEY (target_id) REFERENCES PNJ(idPNJ),
     FOREIGN KEY (initiator_id) REFERENCES PNJ(idPNJ)
 );
 
 CREATE TABLE IF NOT EXISTS Kingdom (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY CHECK(id = 1),
     days INTEGER DEFAULT 1
 );
-

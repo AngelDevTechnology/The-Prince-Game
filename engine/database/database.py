@@ -11,8 +11,8 @@ conn = sqlite3.connect(path_bdd)
 
 primary_keys = {
     "PNJ": "idPNJ",
-    "complots": "idComplot",
-    "royaume": "id",
+    "Plot": "idPlot",
+    "Kingdom": "id",
 }
 
 
@@ -94,16 +94,16 @@ class Database:
 
         self.cur.execute("""
             SELECT
-                c.idComplot,
-                c.initiateur_id,
-                c.cible_id,
-                c.reussi,
-                p1.nom AS initiateur_nom,
-                p2.nom AS cible_nom
-            FROM complots c
-            LEFT JOIN PNJ p1 ON c.initiateur_id = p1.idPNJ
-            LEFT JOIN PNJ p2 ON c.cible_id = p2.idPNJ
-            ORDER BY c.idComplot DESC
+                c.idPlot,
+                c.initiator_id,
+                c.target_id,
+                c.successful,
+                p1.nom AS initiator_nom,
+                p2.nom AS target_nom
+            FROM Plot c
+            LEFT JOIN PNJ p1 ON c.initiator_id = p1.idPNJ
+            LEFT JOIN PNJ p2 ON c.target_id = p2.idPNJ
+            ORDER BY c.idPlot DESC
         """)
 
         rows = self.cur.fetchall()
@@ -122,7 +122,7 @@ class Database:
         """Retrieve kingdom data and initialize it if it does not exist."""
 
         self.cur.execute(
-            "SELECT * FROM royaume WHERE id = 1"
+            "SELECT * FROM Kingdom WHERE id = 1"
         )
 
         row = self.cur.fetchone()
@@ -130,12 +130,12 @@ class Database:
         # Initialize the kingdom if it does not exist.
         if row is None:
             self.cur.execute(
-                "INSERT INTO royaume (id, jours) VALUES (1, 1)"
+                "INSERT INTO Kingdom (id, days) VALUES (1, 1)"
             )
 
             self.conn.commit()
 
-            return {"id": 1, "jours": 1}
+            return {"id": 1, "days": 1}
 
         columns = [column[0] for column in self.cur.description]
 
@@ -145,13 +145,13 @@ class Database:
         """Advance the kingdom calendar by one day."""
 
         self.cur.execute("""
-            INSERT OR IGNORE INTO royaume (id, jours)
+            INSERT OR IGNORE INTO Kingdom (id, days)
             VALUES (1, 1)
         """)
 
         self.cur.execute("""
-            UPDATE royaume
-            SET jours = jours + 1
+            UPDATE Kingdom
+            SET days = days + 1
             WHERE id = 1
         """)
 

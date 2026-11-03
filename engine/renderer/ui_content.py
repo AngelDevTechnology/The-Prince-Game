@@ -53,7 +53,7 @@ class GameUI:
         self.new_loyaute = 70
 
         # ----------------------------------------------
-        # COMPLOTS
+        # PlotS
         # ----------------------------------------------
 
         self.plot_initiator_id = None
@@ -123,7 +123,7 @@ class GameUI:
         else:
             self.select_character(selected)
 
-        # Vérification de l'initiateur
+        # Vérification de l'initiator
         if self.plot_initiator_id not in character_ids:
 
             self.plot_initiator_id = (
@@ -131,7 +131,7 @@ class GameUI:
                 if self.characters else None
             )
 
-        # Vérification de la cible
+        # Vérification de la target
         if (
             self.plot_target_id not in character_ids
             or self.plot_target_id == self.plot_initiator_id
@@ -207,7 +207,7 @@ class GameUI:
         self.nav_button("COUR", "Cour")
         imgui.same_line()
 
-        self.nav_button("COMPLOTS", "Complots")
+        self.nav_button("PlotS", "Plots")
         imgui.same_line()
 
         self.nav_button("ROYAUME", "Royaume")
@@ -223,7 +223,7 @@ class GameUI:
         """Render the council overview and the latest plots."""
         active_plots = [
             plot for plot in self.plots
-            if plot["reussi"] is None
+            if plot["successful"] is None
         ]
 
         imgui.text_colored(
@@ -242,11 +242,11 @@ class GameUI:
         )
 
         imgui.text(
-            f"Complots actifs : {len(active_plots)}"
+            f"Plots actifs : {len(active_plots)}"
         )
 
         imgui.text(
-            f"Complots enregistrés : {len(self.plots)}"
+            f"Plots enregistrés : {len(self.plots)}"
         )
 
         imgui.spacing()
@@ -266,11 +266,11 @@ class GameUI:
         for plot in self.plots[:5]:
 
             imgui.text(
-                f"{plot['initiateur_nom']} "
-                f"-> {plot['cible_nom']}"
+                f"{plot['initiator_nom']} "
+                f"-> {plot['target_nom']}"
             )
 
-            if plot["reussi"] is None:
+            if plot["successful"] is None:
 
                 imgui.same_line()
 
@@ -279,7 +279,7 @@ class GameUI:
                     "[EN COURS]"
                 )
 
-            elif plot["reussi"]:
+            elif plot["successful"]:
 
                 imgui.same_line()
 
@@ -613,14 +613,14 @@ class GameUI:
         return result
 
     # ==================================================
-    # COMPLOTS
+    # PlotS
     # ==================================================
 
     def render_plots(self) -> None:
         """Render plot creation controls and the plot registry."""
         imgui.text_colored(
             self.gold(),
-            "I. NOUVEAU COMPLOT"
+            "I. NOUVEAU Plot"
         )
 
         imgui.spacing()
@@ -634,18 +634,18 @@ class GameUI:
         else:
 
             self.plot_initiator_id = self.character_combo(
-                "Initiateur",
+                "initiator",
                 self.plot_initiator_id
             )
 
             self.plot_target_id = self.character_combo(
-                "Cible",
+                "target",
                 self.plot_target_id,
                 excluded_id=self.plot_initiator_id
             )
 
             if imgui.button(
-                "ENREGISTRER LE COMPLOT",
+                "ENREGISTRER LE Plot",
                 imgui.ImVec2(230, 38)
             ):
 
@@ -658,11 +658,11 @@ class GameUI:
                     try:
 
                         self.db.add(
-                            "complots",
+                            "Plot",
                             {
-                                "initiateur_id": self.plot_initiator_id,
-                                "cible_id": self.plot_target_id,
-                                "reussi": None,
+                                "initiator_id": self.plot_initiator_id,
+                                "target_id": self.plot_target_id,
+                                "successful": None,
                             }
                         )
 
@@ -689,28 +689,28 @@ class GameUI:
 
         imgui.text_colored(
             self.gold(),
-            "II. REGISTRE DES COMPLOTS"
+            "II. REGISTRE DES PLOTS"
         )
 
         if not self.plots:
 
             imgui.text_disabled(
-                "Aucun complot enregistré."
+                "Aucun Plot enregistré."
             )
 
         for plot in self.plots:
 
-            plot_id = plot["idComplot"]
+            plot_id = plot["idplot"]
 
             imgui.separator()
 
             imgui.text(
                 f"#{plot_id} : "
-                f"{plot['initiateur_nom']} "
-                f"-> {plot['cible_nom']}"
+                f"{plot['initiator_nom']} "
+                f"-> {plot['target_nom']}"
             )
 
-            if plot["reussi"] is None:
+            if plot["successful"] is None:
 
                 imgui.text_colored(
                     self.gold(),
@@ -733,7 +733,7 @@ class GameUI:
                     self.resolve_plot(plot_id, False)
                     return
 
-            elif plot["reussi"]:
+            elif plot["successful"]:
 
                 imgui.text_colored(
                     imgui.ImVec4(0.35, 0.75, 0.40, 1.0),
@@ -756,17 +756,17 @@ class GameUI:
 
             self.db.update(
                 int(success),
-                "complots",
-                "reussi",
+                "Plot",
+                "successful",
                 plot_id
             )
 
             self.refresh_data()
 
             self.notification = (
-                "Le complot a été marqué comme réussi."
+                "Le Plot a été marqué comme réussi."
                 if success
-                else "Le complot a été marqué comme échoué."
+                else "Le Plot a été marqué comme échoué."
             )
 
         except sqlite3.Error as error:
@@ -811,7 +811,7 @@ class GameUI:
         )
 
         active_count = sum(
-            plot["reussi"] is None
+            plot["successful"] is None
             for plot in self.plots
         )
 
@@ -838,7 +838,7 @@ class GameUI:
                 self.refresh_data()
 
                 self.notification = (
-                    f"Le royaume entre dans son jour {self.kingdom['jours']}."
+                    f"Le royaume entre dans son jour {self.kingdom['days']}."
                 )
 
             except sqlite3.Error as error:
@@ -920,7 +920,7 @@ class GameUI:
 
             self.render_characters()
 
-        elif self.active_page == "Complots":
+        elif self.active_page == "Plots":
 
             self.render_plots()
 
