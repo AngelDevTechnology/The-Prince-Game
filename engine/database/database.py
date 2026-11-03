@@ -98,8 +98,8 @@ class Database:
                 c.initiator_id,
                 c.target_id,
                 c.successful,
-                p1.nom AS initiator_nom,
-                p2.nom AS target_nom
+                p1.name AS initiator_name,
+                p2.name AS target_name
             FROM Plot c
             LEFT JOIN PNJ p1 ON c.initiator_id = p1.idPNJ
             LEFT JOIN PNJ p2 ON c.target_id = p2.idPNJ

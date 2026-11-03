@@ -40,7 +40,7 @@ class GameUI:
         self.edit_name = ""
         self.edit_role = ""
         self.edit_ambition = 20
-        self.edit_loyaute = 70
+        self.edit_loyalty = 70
         self.edit_is_player = False
 
         # ----------------------------------------------
@@ -50,7 +50,7 @@ class GameUI:
         self.new_name = ""
         self.new_role = "courtier"
         self.new_ambition = 20
-        self.new_loyaute = 70
+        self.new_loyalty = 70
 
         # ----------------------------------------------
         # PLOTS
@@ -266,8 +266,8 @@ class GameUI:
         for plot in self.plots[:5]:
 
             imgui.text(
-                f"{plot['initiator_nom']} "
-                f"-> {plot['target_nom']}"
+                f"{plot['initiator_name']} "
+                f"-> {plot['target_name']}"
             )
 
             if plot["successful"] is None:
@@ -315,14 +315,14 @@ class GameUI:
         self.selected_character = character
         self.selected_character_id = character["idPNJ"]
 
-        self.edit_name = character["nom"]
+        self.edit_name = character["name"]
         self.edit_role = character["role"] or "peasant"
 
         self.edit_ambition = character["ambition"]
-        self.edit_loyaute = character["loyaute"]
+        self.edit_loyalty = character["loyalty"]
 
         self.edit_is_player = bool(
-            character["est_joueur"]
+            character["is_player"]
         )
 
     # ==================================================
@@ -337,14 +337,14 @@ class GameUI:
         character_id = self.selected_character_id
 
         values = {
-            "nom": self.edit_name.strip(),
+            "name": self.edit_name.strip(),
             "role": self.edit_role.strip(),
             "ambition": self.edit_ambition,
-            "loyaute": self.edit_loyaute,
-            "est_joueur": int(self.edit_is_player),
+            "loyalty": self.edit_loyalty,
+            "is_player": int(self.edit_is_player),
         }
 
-        if not values["nom"]:
+        if not values["name"]:
             self.notification = "Le nom ne peut pas être vide."
             return
 
@@ -407,7 +407,7 @@ class GameUI:
             )
 
             label = (
-                f"{character['nom']} "
+                f"{character['name']} "
                 f"({character['role']})"
                 f"##pnj_{character_id}"
             )
@@ -447,9 +447,9 @@ class GameUI:
                 100
             )
 
-            _, self.edit_loyaute = imgui.slider_int(
+            _, self.edit_loyalty = imgui.slider_int(
                 "Loyauté",
-                self.edit_loyaute,
+                self.edit_loyalty,
                 0,
                 100
             )
@@ -494,9 +494,9 @@ class GameUI:
             100
         )
 
-        _, self.new_loyaute = imgui.slider_int(
+        _, self.new_loyalty = imgui.slider_int(
             "Loyauté initiale",
-            self.new_loyaute,
+            self.new_loyalty,
             0,
             100
         )
@@ -525,11 +525,11 @@ class GameUI:
                     new_id = self.db.add(
                         "PNJ",
                         {
-                            "nom": self.new_name.strip(),
+                            "name": self.new_name.strip(),
                             "role": self.new_role.strip(),
                             "ambition": self.new_ambition,
-                            "loyaute": self.new_loyaute,
-                            "est_joueur": 0,
+                            "loyalty": self.new_loyalty,
+                            "is_player": 0,
                         }
                     )
 
@@ -580,7 +580,7 @@ class GameUI:
         )
 
         preview = (
-            selected_character["nom"]
+            selected_character["name"]
             if selected_character
             else "Choisir un personnage..."
         )
@@ -601,7 +601,7 @@ class GameUI:
                 )
 
                 clicked, _ = imgui.selectable(
-                    f"{character['nom']}##{label}_{character_id}",
+                    f"{character['name']}##{label}_{character_id}",
                     is_selected
                 )
 
@@ -706,8 +706,8 @@ class GameUI:
 
             imgui.text(
                 f"#{plot_id} : "
-                f"{plot['initiator_nom']} "
-                f"-> {plot['target_nom']}"
+                f"{plot['initiator_name']} "
+                f"-> {plot['target_name']}"
             )
 
             if plot["successful"] is None:
