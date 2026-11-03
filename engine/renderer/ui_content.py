@@ -53,7 +53,7 @@ class GameUI:
         self.new_loyaute = 70
 
         # ----------------------------------------------
-        # PlotS
+        # PLOTS
         # ----------------------------------------------
 
         self.plot_initiator_id = None
@@ -207,7 +207,7 @@ class GameUI:
         self.nav_button("COUR", "Cour")
         imgui.same_line()
 
-        self.nav_button("PlotS", "Plots")
+        self.nav_button("PLOTS", "Plots")
         imgui.same_line()
 
         self.nav_button("ROYAUME", "Royaume")
@@ -613,7 +613,7 @@ class GameUI:
         return result
 
     # ==================================================
-    # PlotS
+    # PLOTS
     # ==================================================
 
     def render_plots(self) -> None:
