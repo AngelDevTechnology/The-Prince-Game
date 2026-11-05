@@ -1,4 +1,5 @@
 class Character:
+    """create character class"""
     def __init__(self, character_id, name, role, ambition, loyalty, is_player=False):
         self.character_id = character_id
         self.name = name

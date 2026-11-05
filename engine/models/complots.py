@@ -11,9 +11,11 @@ class Complot:
         self.chance = self.success_chance()
 
     def __repr__(self):
+        """return an str object with the name of the initiator and the name of the target"""
         return f"initiator : {self.initiator.name}, target : {self.target.name}"
 
     def success_chance(self):
+        """calculate the success chances for a plot to win"""
         grade_initiator = dico_role[self.initiator.role]
         grade_target = dico_role[self.target.role]
         gap = grade_target - grade_initiator

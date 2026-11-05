@@ -3,7 +3,7 @@ Create a .venv virtual environment and install the dependencies from requirement
 
 install gcc and run "uv run python setup.py build_ext --inplace"
 
-Then "uv run main.py"
+Then "uv run main.py" or "python main.py"
 
 --Elie CADUSSEAU
 --Angel LAPEYRE

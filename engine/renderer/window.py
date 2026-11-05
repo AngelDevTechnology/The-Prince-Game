@@ -33,6 +33,7 @@ class Window:
 
     @staticmethod
     def _choose_monitor():
+        """choose between monitors"""
         monitors = glfw.get_monitors()
 
         if not monitors:
@@ -49,12 +50,14 @@ class Window:
         return monitors[choice]
 
     def set_camera(self, camera) -> None:
+        """set camera"""
         self.camera = camera
     
         self.camera.cursor_captured = self.cursor_captured
         self.camera.first_mouse = True
 
     def change_cursor_mode(self) -> None:
+        """change cursor mode"""
         self.cursor_captured = not self.cursor_captured
         mode = (glfw.CURSOR_DISABLED if self.cursor_captured else glfw.CURSOR_NORMAL)
 
@@ -65,12 +68,15 @@ class Window:
             self.camera.first_mouse = True
 
     def get_cursor_position(self):
+        """return cursor position"""
         return glfw.get_cursor_pos(self.handle)
     
     def get_mouse_button(self, button):
+        """get the mouse button"""
         return glfw.get_mouse_button(self.handle, button)
     
     def get_key_state(self, key):
+        """get the key"""
         return glfw.get_key(self.handle, key)
 
     def handle_camera_mouse(self, glfw_window, xpos, ypos) -> None:
@@ -104,5 +110,6 @@ class Window:
         glfw.swap_buffers(self.handle)
 
     def destroy(self) -> None:
+        """destroy it all"""
         glfw.destroy_window(self.handle)
         glfw.terminate()

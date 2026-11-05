@@ -1,7 +1,8 @@
 from engine.models.character import Character
 
 
-class Courtier(Character):  # create class coutisan
+class Courtier(Character):  
+    """create class coutier"""
     def __init__(
         self, character_id, name, role, ambition, loyalty, is_player=False, influence=0
     ):
@@ -9,6 +10,7 @@ class Courtier(Character):  # create class coutisan
         self.influence = influence
 
     def __repr__(self):
+        """return an str object with all the atributes"""
         return f"{self.character_id}, {self.name}, role : {self.role}, ambition : {self.ambition}, loyalty : {self.loyalty}, is a player : {self.is_player}, influence : {self.influence}"
 
 

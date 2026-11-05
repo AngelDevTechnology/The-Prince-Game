@@ -118,6 +118,7 @@ class Mesh:
         glBindVertexArray(0)
 
     def _compute_normals(self) -> np.ndarray:
+        """Compute unit-length per-vertex normals by area-weighted averaging of adjacent face normals."""
         normals = np.zeros_like(self.positions)
 
         triangles = (
@@ -141,6 +142,7 @@ class Mesh:
         return normals
 
     def draw(self) -> None:
+        """Draw the mesh as triangles using its VAO, indexed if index data is available."""
         glBindVertexArray(self.vao)
 
         if self.index_data is not None:
@@ -151,6 +153,7 @@ class Mesh:
         glBindVertexArray(0)
 
     def destroy(self) -> None:
+        """Release the GPU resources (EBO, VBO and VAO) owned by this mesh."""
         if self.ebo is not None:
             glDeleteBuffers(1, [self.ebo])
             self.ebo = None

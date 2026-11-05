@@ -10,6 +10,7 @@ from engine.math3d.quaternion import Quaternion
 
 
 class Camera:
+    """create camera as a class"""
     def __init__(
         self,
         position=(0.0, 0.0, 3.0),
@@ -38,6 +39,7 @@ class Camera:
         self.last_y = 0.0
 
     def get_view_matrix(self) -> Mat4:
+        """transform quaterions in matrix"""
         rotation = self.orientation.to_matrix().T
         view = np.eye(4, dtype=np.float32)
         view[:3, :3] = rotation
