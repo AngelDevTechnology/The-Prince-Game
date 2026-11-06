@@ -1,5 +1,7 @@
 import sqlite3
 from pathlib import Path
+from engine.models.complots import Complot
+
 
 
 # ==================================================
@@ -156,6 +158,11 @@ class Database:
         """)
 
         self.conn.commit()
+
+    # ==================================================
+    # PLOT SUCCESS
+    # ==================================================
+    
 
     # ==================================================
     # CLOSE

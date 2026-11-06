@@ -781,7 +781,7 @@ class GameUI:
 
     def render_kingdom(self) -> None:
         """Render kingdom statistics and the day advancement control."""
-        day = self.kingdom.get("jours", 1)
+        day = self.kingdom.get("days", 1)
 
         imgui.text_colored(
             self.gold(),
