@@ -32,7 +32,7 @@ import imgui_bundle  # noqa: E402, F401
 import math
 import time
 
-from engine.database.database import Database, conn
+from engine.database.database import Database
 from engine.math3d.mat4d import Mat4
 from engine.math3d.vector3d import Vec3
 from engine.renderer.camera import Camera
@@ -84,7 +84,7 @@ class Game:
             # Database
             # ----------------------------------------------------
 
-            self.database = Database(conn)
+            self.database = Database()
 
             # ----------------------------------------------------
             # Camera

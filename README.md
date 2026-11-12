@@ -155,48 +155,6 @@ python main.py
 
 ---
 
-## Qualité et formatage du code
-
-Le projet utilise **Ruff** pour l'analyse statique, la vérification des conventions et le formatage du code Python.
-
-Vérifier les éventuels problèmes :
-
-```bash
-ruff check .
-```
-
-Corriger automatiquement les problèmes détectés lorsque possible :
-
-```bash
-ruff check --fix .
-```
-
-Vérifier le formatage :
-
-```bash
-ruff format --check .
-```
-
-Appliquer le formatage :
-
-```bash
-ruff format .
-```
-
-Si Ruff n'est pas installé dans l'environnement :
-
-```bash
-uv pip install ruff
-```
-
-Ou avec Python classique :
-
-```bash
-python -m pip install ruff
-```
-
----
-
 ## Technologies utilisées
 
 Le projet s'appuie notamment sur les technologies suivantes :
@@ -208,7 +166,6 @@ Le projet s'appuie notamment sur les technologies suivantes :
 - **GLFW** — gestion de la fenêtre et des événements.
 - **Dear ImGui** — interface utilisateur et outils d'interface.
 - **SQLite** — stockage des données du jeu.
-- **Ruff** — analyse et formatage du code.
 - **UV** — gestion de l'environnement et des dépendances (facultatif).
 
 ---

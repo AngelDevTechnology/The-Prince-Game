@@ -235,7 +235,7 @@ class GameUI:
         imgui.spacing()
 
         imgui.text(
-            f"Jour du royaume : {self.kingdom.get('jours', 1)}"
+            f"Jour du royaume : {self.kingdom.get('days', 1)}"
         )
 
         imgui.text(
@@ -701,7 +701,7 @@ class GameUI:
 
         for plot in self.plots:
 
-            plot_id = plot["idplot"]
+            plot_id = plot["idPlot"]
 
             imgui.separator()
 
@@ -842,7 +842,7 @@ class GameUI:
                     f"Le royaume entre dans son jour {self.kingdom['days']}."
                 )
 
-            except sqlite3.Error as error:
+            except (sqlite3.Error, ValueError) as error:
 
                 self.notification = (
                     f"Erreur : {error}"
