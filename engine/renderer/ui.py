@@ -1,7 +1,7 @@
 from imgui_bundle import imgui
-import glfw
-
 from imgui_bundle.python_backends.glfw_backend import GlfwRenderer
+from OpenGL.GL import GL_VERSION, glGetString
+import glfw
 
 from engine.database.database import Database
 from engine.renderer.ui_content import GameUI
@@ -9,67 +9,152 @@ from engine.renderer.window import Window
 
 
 class ImGuiManager:
-    """Manage ImGui initialization, input handling, rendering, and shutdown."""
+    """Manage ImGui initialization, input, rendering, and shutdown."""
+
+    # ============================================================
+    # INITIALIZATION
+    # ============================================================
 
     def __init__(self, window: Window, database: Database) -> None:
-        """Initialize the ImGui context, GLFW backend, UI, and callbacks."""
+        """Initialize ImGui only after activating a valid GL context."""
 
         self.window = window
+        self.impl = None
+        self._context_created = False
+        self._callbacks_registered = False
+        self._closed = False
 
-        # Initialize ImGui context.
-        imgui.create_context()
+        # --------------------------------------------------------
+        # Activate and verify the OpenGL context
+        # --------------------------------------------------------
 
-        # Initialize GLFW backend.
-        self.impl = GlfwRenderer(
-            window.handle,
-            attach_callbacks=False,
-        )
+        self.window.make_context_current()
 
-        # Initialize UI content.
-        self.ui = GameUI(database)
+        gl_version = glGetString(GL_VERSION)
 
-        self._was_cursor_captured = window.cursor_captured
+        if gl_version is None:
+            raise RuntimeError(
+                "OpenGL ne voit aucun contexte courant. "
+                "Vérifiez la création de la fenêtre GLFW."
+            )
 
-        # Register GLFW callbacks.
-        glfw.set_key_callback(
-            window.handle,
-            self.impl.keyboard_callback,
-        )
+        # --------------------------------------------------------
+        # Initialize ImGui context and GLFW/OpenGL backend
+        # --------------------------------------------------------
 
-        glfw.set_cursor_pos_callback(
-            window.handle,
-            self._cursor_pos_callback,
-        )
+        try:
+            imgui.create_context()
+            self._context_created = True
 
-        glfw.set_mouse_button_callback(
-            window.handle,
-            self._mouse_button_callback,
-        )
+            self.impl = GlfwRenderer(
+                self.window.handle,
+                attach_callbacks=False,
+            )
 
-        glfw.set_window_size_callback(
-            window.handle,
-            self.impl.resize_callback,
-        )
+            # ----------------------------------------------------
+            # Initialize UI content
+            # ----------------------------------------------------
 
-        glfw.set_char_callback(
-            window.handle,
-            self.impl.char_callback,
-        )
+            self.ui = GameUI(database)
+            self._was_cursor_captured = self.window.cursor_captured
 
-        glfw.set_scroll_callback(
-            window.handle,
-            self._scroll_callback,
-        )
+            # ----------------------------------------------------
+            # Register GLFW callbacks
+            # ----------------------------------------------------
 
-    # ==================================================
+            glfw.set_key_callback(
+                self.window.handle,
+                self.impl.keyboard_callback,
+            )
+
+            glfw.set_cursor_pos_callback(
+                self.window.handle,
+                self._cursor_pos_callback,
+            )
+
+            glfw.set_mouse_button_callback(
+                self.window.handle,
+                self._mouse_button_callback,
+            )
+
+            glfw.set_window_size_callback(
+                self.window.handle,
+                self.impl.resize_callback,
+            )
+
+            glfw.set_char_callback(
+                self.window.handle,
+                self.impl.char_callback,
+            )
+
+            glfw.set_scroll_callback(
+                self.window.handle,
+                self._scroll_callback,
+            )
+
+            self._callbacks_registered = True
+
+        except Exception:
+            self._cleanup_initialization()
+            raise
+
+    # ============================================================
+    # INITIALIZATION CLEANUP
+    # ============================================================
+
+    def _cleanup_initialization(self) -> None:
+        """Release partially initialized ImGui resources."""
+
+        try:
+            if self.window.handle is not None:
+                self.window.make_context_current()
+
+            if self._callbacks_registered:
+                self._unregister_callbacks()
+
+            if self.impl is not None:
+                self.impl.shutdown()
+                self.impl = None
+
+        finally:
+            if self._context_created:
+                imgui.destroy_context()
+                self._context_created = False
+
+    # ============================================================
+    # GLFW CALLBACK MANAGEMENT
+    # ============================================================
+
+    def _unregister_callbacks(self) -> None:
+        """Remove callbacks registered by this manager."""
+
+        handle = self.window.handle
+
+        if handle is None:
+            return
+
+        glfw.set_key_callback(handle, None)
+        glfw.set_cursor_pos_callback(handle, None)
+        glfw.set_mouse_button_callback(handle, None)
+        glfw.set_window_size_callback(handle, None)
+        glfw.set_char_callback(handle, None)
+        glfw.set_scroll_callback(handle, None)
+
+        self._callbacks_registered = False
+
+    # ============================================================
     # INPUT HANDLING
-    # ==================================================
+    # ============================================================
 
-    def _cursor_pos_callback(self, glfw_window, xpos, ypos):
-        """Handle cursor movement depending on the cursor capture state."""
+    def _cursor_pos_callback(
+        self,
+        glfw_window,
+        xpos: float,
+        ypos: float,
+    ) -> None:
+        """Route cursor movement to the camera or ImGui."""
 
         if self.window.cursor_captured:
-            # Forward mouse movement to the camera.
             imgui.get_io().add_mouse_pos_event(-1.0, -1.0)
 
             self.window.handle_camera_mouse(
@@ -77,18 +162,22 @@ class ImGuiManager:
                 xpos,
                 ypos,
             )
-
             return
 
-        # Forward mouse movement to ImGui.
         self.impl.mouse_callback(
             glfw_window,
             xpos,
             ypos,
         )
 
-    def _mouse_button_callback(self, glfw_window, button, action, mods):
-        """Forward mouse button events to ImGui when the cursor is free."""
+    def _mouse_button_callback(
+        self,
+        glfw_window,
+        button: int,
+        action: int,
+        mods: int,
+    ) -> None:
+        """Forward mouse clicks to ImGui when the cursor is visible."""
 
         if not self.window.cursor_captured:
             self.impl.mouse_button_callback(
@@ -98,8 +187,13 @@ class ImGuiManager:
                 mods,
             )
 
-    def _scroll_callback(self, glfw_window, xoffset, yoffset):
-        """Forward scroll events to ImGui when the cursor is free."""
+    def _scroll_callback(
+        self,
+        glfw_window,
+        xoffset: float,
+        yoffset: float,
+    ) -> None:
+        """Forward scrolling to ImGui when the cursor is visible."""
 
         if not self.window.cursor_captured:
             self.impl.scroll_callback(
@@ -108,65 +202,71 @@ class ImGuiManager:
                 yoffset,
             )
 
-    # ==================================================
+    # ============================================================
     # RENDERING
-    # ==================================================
+    # ============================================================
 
     def render(self) -> None:
-        """Process inputs, update the UI, and render the ImGui frame."""
+        """Process input, build the UI frame, and render it."""
 
-        # Process incoming inputs.
+        if self._closed or self.impl is None:
+            raise RuntimeError("ImGuiManager is already closed.")
+
+        # The context may have been switched by another subsystem.
+        self.window.make_context_current()
+
         self.impl.process_inputs()
 
         io = imgui.get_io()
 
-        # Synchronize cursor state with ImGui.
+        # --------------------------------------------------------
+        # Synchronize cursor state
+        # --------------------------------------------------------
+
         if self.window.cursor_captured:
             io.add_mouse_pos_event(-1.0, -1.0)
 
-            # Release any potentially active mouse buttons.
             if not self._was_cursor_captured:
                 for button in range(5):
-                    io.add_mouse_button_event(
-                        button,
-                        False,
-                    )
+                    io.add_mouse_button_event(button, False)
 
         self._was_cursor_captured = self.window.cursor_captured
 
-        # Begin a new ImGui frame.
+        # --------------------------------------------------------
+        # Build and render ImGui frame
+        # --------------------------------------------------------
+
         imgui.new_frame()
 
-        # Display UI only when the cursor is free.
         if not self.window.cursor_captured:
             self.ui.render()
 
-        # Render ImGui draw data.
         imgui.render()
+        self.impl.render(imgui.get_draw_data())
 
-        self.impl.render(
-            imgui.get_draw_data(),
-        )
-
-    # ==================================================
+    # ============================================================
     # SHUTDOWN
-    # ==================================================
+    # ============================================================
 
     def shutdown(self) -> None:
-        """Unregister GLFW callbacks and release ImGui resources."""
+        """Release backend resources while the OpenGL context is valid."""
 
-        handle = self.window.handle
+        if self._closed:
+            return
 
-        # Unregister GLFW callbacks.
-        glfw.set_key_callback(handle, None)
-        glfw.set_cursor_pos_callback(handle, None)
-        glfw.set_mouse_button_callback(handle, None)
-        glfw.set_window_size_callback(handle, None)
-        glfw.set_char_callback(handle, None)
-        glfw.set_scroll_callback(handle, None)
+        self.window.make_context_current()
 
-        # Release backend resources.
-        self.impl.shutdown()
+        try:
+            if self._callbacks_registered:
+                self._unregister_callbacks()
 
-        # Destroy ImGui context.
-        imgui.destroy_context()
+            if self.impl is not None:
+                self.impl.shutdown()
+                self.impl = None
+
+        finally:
+            if self._context_created:
+                imgui.destroy_context()
+                self._context_created = False
+
+            self._closed = True

@@ -4,6 +4,7 @@ from imgui_bundle import imgui
 
 from engine.renderer.ui_theme import MedievalTheme
 
+
 class GameUI:
 
     def __init__(self, database) -> None:

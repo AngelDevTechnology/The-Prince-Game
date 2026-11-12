@@ -1,21 +1,34 @@
+from dataclasses import dataclass
+
 from engine.models.character import Character
 
 
-class Courtier(Character):  
-    """create class coutier"""
-    def __init__(
-        self, character_id, name, role, ambition, loyalty, is_player=False, influence=0
-    ):
-        super().__init__(character_id, name, role, ambition, loyalty, is_player)
-        self.influence = influence
+@dataclass(slots=True)
+class Courtier(Character):
+    """
+    Represents a courtier in the royal court.
+    """
 
-    def __repr__(self):
-        """return an str object with all the atributes"""
-        return f"{self.character_id}, {self.name}, role : {self.role}, ambition : {self.ambition}, loyalty : {self.loyalty}, is a player : {self.is_player}, influence : {self.influence}"
+    influence: float = 0.0
 
+    def __post_init__(self) -> None:
+        if not 0.0 <= self.influence <= 100.0:
+            raise ValueError("Influence must be between 0 and 100.")
 
-"""
-from models.courtier import Courtier
+    def modify_influence(self, amount: float) -> None:
+        self.influence = max(
+            0.0,
+            min(100.0, self.influence + amount),
+        )
 
-ardouin = Courtier(character_id=1, name="Ardouin", age=35, ambition=80, loyalty=60, influence=75)
-"""
+    def __repr__(self) -> str:
+        return (
+            f"Courtier("
+            f"id={self.character_id}, "
+            f"name={self.name!r}, "
+            f"role={self.role!r}, "
+            f"ambition={self.ambition}, "
+            f"loyalty={self.loyalty}, "
+            f"influence={self.influence}"
+            f")"
+        )
