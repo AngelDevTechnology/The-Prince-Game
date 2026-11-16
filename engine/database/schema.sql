@@ -1,3 +1,4 @@
+-- database: ./The_prince.db
 -- ============================================================
 -- THE PRINCE - DATABASE SCHEMA
 -- ============================================================
@@ -5,7 +6,8 @@
 CREATE TABLE IF NOT EXISTS PNJ (
     idPNJ INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    role TEXT NOT NULL DEFAULT 'peasant',
+    role TEXT NOT NULL DEFAULT 'peasant'
+        CHECK (role IN ('peasant', 'courtier', 'advisor', 'king')),
     ambition INTEGER NOT NULL DEFAULT 20
         CHECK (ambition BETWEEN 0 AND 100),
     loyalty INTEGER NOT NULL DEFAULT 70
