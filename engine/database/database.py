@@ -516,8 +516,8 @@ class Database:
         """Drop all the tables to reset the game"""
         print("you will need to restart the game")
         a = input('press "y" to execute')
-        if a.lower() == y:
-            self.cur.executescript(f"DROP TABLE Plot; DROP TABLE PNJ; DROP TABLE Kingdom;")
+        if a.lower() == "y":
+            self.cur.executescript("DROP TABLE Plot; DROP TABLE PNJ; DROP TABLE Kingdom;")
             self.conn.commit()
 
     # ========================================================
