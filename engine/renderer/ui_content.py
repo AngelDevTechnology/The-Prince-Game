@@ -60,8 +60,10 @@ class GameUI:
         self.plot_initiator_id = None
         self.plot_target_id = None
 
+        self.confirm_reset = None
         # Chargement initial
         self.refresh_data()
+
 
     # ==================================================
     # COULEURS
@@ -848,6 +850,21 @@ class GameUI:
                     f"Erreur : {error}"
                 )
 
+        if imgui.button("Reset The Game", imgui.ImVec2(300, 42)):
+            self.confirm_reset = True
+
+        if self.confirm_reset:
+            imgui.text("Tout sera supprimé. Sûr ?")
+            if imgui.button("Oui, tout supprimer"):
+                try:
+                    self.db.reset()
+                    self.refresh_data()
+                except Exception as e:
+                    print(f"Erreur lors du reset : {e}")
+                self.confirm_reset = False
+            imgui.same_line()
+            if imgui.button("Annuler"):
+                self.confirm_reset = False
     # ==================================================
     # FOOTER
     # ==================================================
