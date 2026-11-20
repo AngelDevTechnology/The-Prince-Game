@@ -513,10 +513,10 @@ class Database:
     # ========================================================
 
     def reset(self): 
-        """Drop all the tables to reset the game"""
+        """Drop all the tables to reset the game, recreate tables after that"""
         self.cur.executescript("DROP TABLE Plot; DROP TABLE PNJ; DROP TABLE Kingdom;")
         self.conn.commit()
-
+        initialize_database(self.conn)
     # ========================================================
     # RESOURCE DESTRUCTION
     # ========================================================
