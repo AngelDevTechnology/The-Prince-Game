@@ -34,7 +34,7 @@ import time
 
 from medieval_court.paths import SHADERS_DIR
 
-from .database.database import Database, conn
+from .database.database import Database
 from .math3d.mat4d import Mat4
 from .math3d.vector3d import Vec3
 from .renderer.camera import Camera
@@ -86,7 +86,7 @@ class Game:
             # Database
             # ----------------------------------------------------
 
-            self.database = Database(conn)
+            self.database = Database()
 
             # ----------------------------------------------------
             # Camera

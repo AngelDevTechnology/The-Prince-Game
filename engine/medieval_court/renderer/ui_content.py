@@ -60,8 +60,10 @@ class GameUI:
         self.plot_initiator_id = None
         self.plot_target_id = None
 
+        self.confirm_reset = None
         # Chargement initial
         self.refresh_data()
+
 
     # ==================================================
     # COULEURS
@@ -235,7 +237,7 @@ class GameUI:
         imgui.spacing()
 
         imgui.text(
-            f"Jour du royaume : {self.kingdom.get('jours', 1)}"
+            f"Jour du royaume : {self.kingdom.get('days', 1)}"
         )
 
         imgui.text(
@@ -701,7 +703,7 @@ class GameUI:
 
         for plot in self.plots:
 
-            plot_id = plot["idplot"]
+            plot_id = plot["idPlot"]
 
             imgui.separator()
 
@@ -842,12 +844,34 @@ class GameUI:
                     f"Le royaume entre dans son jour {self.kingdom['days']}."
                 )
 
-            except sqlite3.Error as error:
+            except (sqlite3.Error, ValueError) as error:
 
                 self.notification = (
                     f"Erreur : {error}"
                 )
 
+        if imgui.button("RESET THE GAME", imgui.ImVec2(240, 42)):
+            self.confirm_reset = True
+
+        if self.confirm_reset:
+            imgui.text("Tout sera supprimé. Sûr ?")
+            if imgui.button("Oui, tout supprimer"):
+                try:
+
+                    self.db.reset()
+                    self.refresh_data()
+                    self.notification = (
+                                        "Bienvenue dans le cabinet du Prince."
+                                    )
+
+                except Exception as e:
+
+                    print(f"Erreur lors du reset : {e}")
+                self.confirm_reset = False
+            imgui.same_line()
+
+            if imgui.button("Annuler"):
+                self.confirm_reset = False
     # ==================================================
     # FOOTER
     # ==================================================
