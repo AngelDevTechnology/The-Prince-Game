@@ -11,8 +11,8 @@ from setuptools import Extension, setup
 
 extensions = [
     Extension(
-        name="engine.renderer._obj_parser",
-        sources=["engine/renderer/_obj_parser.pyx"],
+        name="engine.medieval_court.renderer._obj_parser",
+        sources=["engine/medieval_court/renderer/_obj_parser.pyx"],
     )
 ]
 

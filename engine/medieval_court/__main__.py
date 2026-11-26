@@ -32,16 +32,18 @@ import imgui_bundle  # noqa: E402, F401
 import math
 import time
 
-from engine.database.database import Database, conn
-from engine.math3d.mat4d import Mat4
-from engine.math3d.vector3d import Vec3
-from engine.renderer.camera import Camera
-from engine.renderer.loader import load_mesh_data
-from engine.renderer.mesh import Mesh
-from engine.renderer.renderer import Renderer
-from engine.renderer.shader import Shader
-from engine.renderer.ui import ImGuiManager
-from engine.renderer.window import Window
+from medieval_court.paths import SHADERS_DIR
+
+from .database.database import Database, conn
+from .math3d.mat4d import Mat4
+from .math3d.vector3d import Vec3
+from .renderer.camera import Camera
+from .renderer.loader import load_mesh_data
+from .renderer.mesh import Mesh
+from .renderer.renderer import Renderer
+from .renderer.shader import Shader
+from .renderer.ui import ImGuiManager
+from .renderer.window import Window
 
 
 
@@ -113,8 +115,8 @@ class Game:
             # ----------------------------------------------------
 
             self.shader = Shader(
-                "engine/shaders/basic.vert",
-                "engine/shaders/basic.frag",
+                str(SHADERS_DIR / "basic.vert"),
+                str(SHADERS_DIR / "basic.frag")
             )
 
             positions, indices = load_mesh_data("911_scene.obj")

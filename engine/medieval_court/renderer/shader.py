@@ -28,7 +28,7 @@ from OpenGL.GL import (
 )
 from OpenGL.GL.shaders import compileProgram, compileShader
 
-from engine.math3d.mat4d import Mat4
+from medieval_court.math3d.mat4d import Mat4
 
 FloatMatrix = NDArray[np.float32]
 

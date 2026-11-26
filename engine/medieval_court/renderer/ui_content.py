@@ -2,7 +2,7 @@ import sqlite3
 
 from imgui_bundle import imgui
 
-from engine.renderer.ui_theme import MedievalTheme
+from medieval_court.renderer.ui_theme import MedievalTheme
 
 
 class GameUI:

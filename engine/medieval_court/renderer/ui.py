@@ -3,9 +3,9 @@ from imgui_bundle.python_backends.glfw_backend import GlfwRenderer
 from OpenGL.GL import GL_VERSION, glGetString
 import glfw
 
-from engine.database.database import Database
-from engine.renderer.ui_content import GameUI
-from engine.renderer.window import Window
+from medieval_court.database.database import Database
+from medieval_court.renderer.ui_content import GameUI
+from medieval_court.renderer.window import Window
 
 
 class ImGuiManager:

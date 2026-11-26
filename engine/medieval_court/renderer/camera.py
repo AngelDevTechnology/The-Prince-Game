@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import math
 
-from engine.math3d.mat4d import Mat4
-from engine.math3d.quaternion import Quaternion
-from engine.math3d.vector3d import Vec3
+from medieval_court.math3d.mat4d import Mat4
+from medieval_court.math3d.quaternion import Quaternion
+from medieval_court.math3d.vector3d import Vec3
 
 
 class Camera:
