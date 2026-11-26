@@ -860,6 +860,9 @@ class GameUI:
 
                     self.db.reset()
                     self.refresh_data()
+                    self.notification = (
+                                        "Bienvenue dans le cabinet du Prince."
+                                    )
 
                 except Exception as e:
 
